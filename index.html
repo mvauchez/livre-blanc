@@ -473,7 +473,7 @@
       background-color: var(--bg-cream);
       border: 1px solid #e3e1dc;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-      padding: 6px 0;
+      padding: 14px 0;
       min-width: 190px;
       z-index: 61;
     }
@@ -484,7 +484,7 @@
       display: block;
       width: 100%;
       text-align: right;
-      padding: 12px 18px;
+      padding: 18px 22px;
       font-size: 0.95rem;
     }
 
@@ -679,42 +679,31 @@
 
         const visual = card.querySelector('.card-visual');
 
-        if (CAN_HOVER) {
-          // Ordinateur : ne se lève que si la souris passe réellement sur la carte
-          // visible (et non sur la zone vide réservée à la remontée, au repos)
-          visual.addEventListener('mouseenter', () => card.classList.add('is-active'));
+        // Ordinateur uniquement : ne se lève que si la souris passe réellement sur
+        // la carte visible (et non sur la zone vide réservée à la remontée, au repos).
+        // Le test isMobile() est refait à chaque événement : ainsi, en fenêtre étroite
+        // (mode téléphone), le survol ni le clic ne relèvent la carte.
+        visual.addEventListener('mouseenter', () => {
+          if (isMobile() || !CAN_HOVER) return;
+          card.classList.add('is-active');
+        });
 
-          // Ne redescend que quand la souris quitte entièrement la zone
-          // (repos + surélevée) : évite qu'elle ne se lève/couche en boucle
-          card.addEventListener('mouseleave', () => card.classList.remove('is-active'));
-        }
+        // Ne redescend que quand la souris quitte entièrement la zone
+        // (repos + surélevée) : évite qu'elle ne se lève/couche en boucle
+        card.addEventListener('mouseleave', () => {
+          if (isMobile() || !CAN_HOVER) return;
+          card.classList.remove('is-active');
+        });
 
-        // Téléphone : on relève la carte par un glissement du doigt vers le haut
-        let touchStartY = null;
-        let touchStartX = null;
-        visual.addEventListener('touchstart', (e) => {
-          touchStartY = e.touches[0].clientY;
-          touchStartX = e.touches[0].clientX;
-        }, { passive: true });
-
-        visual.addEventListener('touchend', (e) => {
-          if (touchStartY === null) return;
-          const dy = e.changedTouches[0].clientY - touchStartY;
-          const dx = e.changedTouches[0].clientX - touchStartX;
-          touchStartY = null;
-          touchStartX = null;
-          // glissement vers le haut, suffisamment vertical
-          if (dy < -30 && Math.abs(dy) > Math.abs(dx)) {
+        // Téléphone : un appui sur la carte couchée la relève ; un second appui
+        // sur la carte relevée ouvre la page de la propriété.
+        card.addEventListener('click', (e) => {
+          if (card.classList.contains('is-active')) return; // carte relevée : on laisse le lien s'ouvrir
+          // Au repos, l'appui ne doit jamais rediriger vers la propriété
+          e.preventDefault();
+          if (isMobile()) {
             closeAllCards();
             card.classList.add('is-active');
-          }
-        }, { passive: true });
-
-        // Empêche la navigation tant que la carte n'est pas relevée :
-        // au repos, la zone de clic ne doit pas rediriger vers la propriété
-        card.addEventListener('click', (e) => {
-          if (!card.classList.contains('is-active')) {
-            e.preventDefault();
           }
         });
       }
@@ -805,11 +794,11 @@
     btnPrev.addEventListener('click', () => slide(-1));
     btnNext.addEventListener('click', () => slide(1));
 
-    // Un appui en dehors d'une carte relevée la recouche
+    // Un appui en dehors des cartes les recouche
+    // (l'appui sur une carte est géré par son propre gestionnaire de clic)
     document.addEventListener('pointerdown', (e) => {
-      if (!e.target.closest('.card.is-active')) {
-        closeAllCards();
-      }
+      if (e.target.closest('.card')) return;
+      closeAllCards();
     });
 
     // --- Menu téléphone ---
