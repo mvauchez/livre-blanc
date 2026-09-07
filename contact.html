@@ -127,11 +127,11 @@
   /* Emplacement du pion */
   .pion-wrap {
     text-align: center;
-    margin: 20px 0 24px;
+    margin: 0 0 16px;
   }
 
   .pion-wrap img {
-    max-height: 100px;
+    max-height: 60px;
     width: auto;
     cursor: pointer;
   }
@@ -204,21 +204,39 @@
   ];
   // ===================================================================
 
+  // Préchargement des sons : évite les échecs de lecture liés à un fichier
+  // pas encore prêt au moment du clic (fréquent sur mobile/Safari).
+  const pionAudios = PION_SONS.map(src => {
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    return audio;
+  });
+
   const pionContact = document.getElementById('pionContact');
   let pionEnCours = false;
+
+  function debloquerPion() {
+    pionEnCours = false;
+  }
 
   pionContact.addEventListener('click', function() {
     if (pionEnCours) return; // le son en cours ne peut pas être coupé
 
     pionEnCours = true;
-    const sonChoisi = PION_SONS[Math.floor(Math.random() * PION_SONS.length)];
-    const son = new Audio(sonChoisi);
+    const son = pionAudios[Math.floor(Math.random() * pionAudios.length)];
+    son.currentTime = 0;
 
-    son.addEventListener('ended', function() {
-      pionEnCours = false;
-    });
+    son.addEventListener('ended', debloquerPion, { once: true });
+    son.addEventListener('error', debloquerPion, { once: true });
 
-    son.play();
+    const lecture = son.play();
+    if (lecture && typeof lecture.catch === 'function') {
+      lecture.catch(function() {
+        // La lecture a été bloquée ou a échoué : on débloque le pion
+        // pour ne pas rester coincé silencieusement.
+        debloquerPion();
+      });
+    }
   });
 </script>
 </body>
