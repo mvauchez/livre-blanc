@@ -74,7 +74,7 @@
   }
 
   .green-inner {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: clamp(24px, 4vh, 44px) clamp(20px, 4vw, 40px) 70px;
   }
@@ -101,16 +101,19 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 14px 22px;
+    padding: 8px 22px;
     position: relative;
+    flex-wrap: nowrap;
+    min-width: 0;
   }
 
   .toolbar-group label,
   .loc-toggle {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    white-space: nowrap;
   }
 
   .toolbar-divider {
@@ -128,6 +131,7 @@
     border: 2px solid var(--text-dark);
     padding: 8px 12px;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .toolbar-localisation {
