@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nos réalisations - HASA Promotion</title>
+<link rel="icon" type="image/png" href="Images/Logo Favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-cream: #faf9f7;
+    --bg-green: #d8e5d1;
+    --text-dark: #1a1a1a;
+    --text-muted: #55554d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-green);
+  }
+
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Bandeau blanc du haut : logo + retour accueil ---------- */
+  .topbar {
+    flex: 0 0 auto;
+    background-color: var(--bg-cream);
+  }
+
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px clamp(20px, 4vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .logo {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+
+  .btn-home-top {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+    border: 2px solid var(--text-dark);
+    padding: 10px 20px;
+    cursor: pointer;
+    color: var(--text-dark);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn-home-top:hover { background-color: #f2f2f2; }
+
+  /* ---------- Zone verte ---------- */
+  .green-area {
+    flex: 1 1 auto;
+    background-color: var(--bg-green);
+  }
+
+  .green-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(24px, 4vh, 44px) clamp(20px, 4vw, 40px) 70px;
+  }
+
+  .page-title {
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 1.4vw + 1.4rem, 2.4rem);
+    margin-bottom: clamp(20px, 3vh, 34px);
+  }
+
+  /* ---------- Barre de tri / filtre : prend toute la largeur ---------- */
+  .toolbar {
+    background-color: #ffffff;
+    border: 2px solid var(--text-dark);
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin-bottom: clamp(24px, 4vh, 40px);
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    position: relative;
+  }
+
+  .toolbar-group label,
+  .loc-toggle {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .toolbar-divider {
+    width: 2px;
+    background-color: var(--text-dark);
+    flex: 0 0 auto;
+  }
+
+  #sortSelect {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    background-color: #ffffff;
+    border: 2px solid var(--text-dark);
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .toolbar-localisation {
+    flex: 1 1 auto;
+  }
+
+  .loc-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dark);
+    padding: 0;
+  }
+
+  .loc-toggle .chevron {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--text-dark);
+    border-bottom: 2px solid var(--text-dark);
+    transform: rotate(45deg);
+    transition: transform .2s ease;
+  }
+
+  .loc-toggle[aria-expanded="true"] .chevron {
+    transform: rotate(225deg);
+  }
+
+  .loc-count {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .loc-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 22px;
+    background-color: #ffffff;
+    border: 2px solid var(--text-dark);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 240px;
+    z-index: 20;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .loc-panel[hidden] { display: none; }
+
+  .loc-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+
+  .loc-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .loc-option input {
+    accent-color: var(--text-dark);
+  }
+
+  /* ---------- Grille des propriétés (4 vignettes max par ligne) ---------- */
+  .properties-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(18px, 2.4vw, 30px);
+  }
+
+  .prop-card {
+    display: block;
+    text-decoration: none;
+    background: none;
+    transition: transform .25s var(--ease-slide, ease), filter .25s ease;
+  }
+
+  .prop-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+    transition: filter .25s ease;
+  }
+
+  .prop-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .prop-card:hover img {
+    filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.28));
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 980px) {
+    .properties-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 680px) {
+    .properties-grid { grid-template-columns: repeat(2, 1fr); }
+    .toolbar { flex-direction: column; }
+    .toolbar-divider { width: 100%; height: 2px; }
+  }
+
+  @media (max-width: 420px) {
+    .properties-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
+        <a class="btn-home-top" href="index.html">&larr; Retour à l'accueil</a>
+      </div>
+    </header>
+
+    <div class="green-area">
+      <div class="green-inner">
+
+        <h1 class="page-title">Nos réalisations</h1>
+
+        <div class="toolbar">
+          <div class="toolbar-group">
+            <label for="sortSelect">Classer par</label>
+            <select id="sortSelect">
+              <option value="type">Type de biens</option>
+              <option value="surface-asc">Superficie (petite à grande)</option>
+              <option value="surface-desc">Superficie (grande à petite)</option>
+              <option value="price-asc">Prix (croissant)</option>
+              <option value="price-desc">Prix (décroissant)</option>
+            </select>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <div class="toolbar-group toolbar-localisation">
+            <button class="loc-toggle" id="locToggle" aria-expanded="false">
+              Localisation <span class="loc-count" id="locCount"></span>
+              <span class="chevron"></span>
+            </button>
+            <div class="loc-panel" id="locPanel" hidden></div>
+          </div>
+        </div>
+
+        <div class="properties-grid" id="propertiesGrid"></div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* =========================================================================
+       DONNÉES DES PROPRIÉTÉS
+       -> Phase de test : seule "Rue de Metz" est renseignée pour valider
+          la mise en page (vignette, tri, filtre localisation).
+       -> Pour ajouter un bien : dupliquer un objet ci-dessous en reprenant
+          les mêmes champs que dans propriete.html (slug, title, price,
+          surface, type, color) + "thumb" = chemin de la vignette
+          (ex: "Images/Cases/Case METZ.png").
+       ========================================================================= */
+    const PROPERTIES = [
+      {
+        slug: 'rue-de-metz',
+        title: 'Rue de Metz',
+        price: '- €',        // PLACEHOLDER — reprendre la valeur de propriete.html
+        surface: '164 m²',   // PLACEHOLDER — reprendre la valeur de propriete.html
+        type: 'Appartement',
+        color: '#22a54c',
+        thumb: 'Images/Cases/Case METZ.png'
+      }
+      // ,{ slug: 'rue-tolosane', title: 'Rue Tolosane', price: '- €', surface: '52 m²', type: 'Appartement', color: '#e3030d', thumb: 'Images/Cases/Case TOLOSANE.png' }
+      // ,{ slug: 'rue-mage', title: 'Rue Mage', price: '- €', surface: '165 m²', type: 'Bureau', color: '#ffed00', thumb: 'Images/Cases/Case MAGE.png' }
+      // ,{ slug: 'impasse-ampere', title: 'Impasse Ampère', price: '- €', surface: '96 m²', type: 'Maison', color: '#d73089', thumb: 'Images/Cases/Case AMPERE.png' }
+      // ,{ slug: 'rue-cany', title: 'Rue Cany', price: '- €', surface: '86 m²', type: 'Appartement', color: '#bae2fb', thumb: 'Images/Cases/Case CANY.png' }
+      // ,{ slug: 'rue-croix-baragnon', title: 'Rue Croix Baragnon', price: '-€', surface: '62 m²', type: 'Maison', color: '#036ab3', thumb: 'Images/Cases/Case CROIX BARAGNON.png' }
+    ];
+
+    // Extrait un nombre depuis "164 m²" ou "- €" (renvoie NaN si aucun chiffre)
+    function parseNumber(str) {
+      const match = String(str).replace(/\s/g, '').match(/[\d.,]+/);
+      if (!match) return NaN;
+      return parseFloat(match[0].replace(',', '.'));
+    }
+
+    const grid = document.getElementById('propertiesGrid');
+    const sortSelect = document.getElementById('sortSelect');
+    const locToggle = document.getElementById('locToggle');
+    const locPanel = document.getElementById('locPanel');
+    const locCount = document.getElementById('locCount');
+
+    let selectedStreets = new Set(); // vide = toutes les rues affichées
+
+    // --- Construction du panneau "Localisation" à partir des biens existants ---
+    function buildLocPanel() {
+      locPanel.innerHTML = '';
+      PROPERTIES.forEach(prop => {
+        const label = document.createElement('label');
+        label.className = 'loc-option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = prop.slug;
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) selectedStreets.add(prop.slug);
+          else selectedStreets.delete(prop.slug);
+          updateLocCount();
+          render();
+        });
+
+        const swatch = document.createElement('span');
+        swatch.className = 'loc-swatch';
+        swatch.style.backgroundColor = prop.color;
+
+        const text = document.createElement('span');
+        text.textContent = prop.title;
+
+        label.appendChild(checkbox);
+        label.appendChild(swatch);
+        label.appendChild(text);
+        locPanel.appendChild(label);
+      });
+    }
+
+    function updateLocCount() {
+      locCount.textContent = selectedStreets.size > 0 ? '(' + selectedStreets.size + ')' : '';
+    }
+
+    locToggle.addEventListener('click', () => {
+      const isOpen = locToggle.getAttribute('aria-expanded') === 'true';
+      locToggle.setAttribute('aria-expanded', String(!isOpen));
+      locPanel.hidden = isOpen;
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!locToggle.contains(e.target) && !locPanel.contains(e.target)) {
+        locToggle.setAttribute('aria-expanded', 'false');
+        locPanel.hidden = true;
+      }
+    });
+
+    // --- Tri ---
+    function sortProperties(list) {
+      const mode = sortSelect.value;
+      const sorted = [...list];
+
+      switch (mode) {
+        case 'type':
+          sorted.sort((a, b) => a.type.localeCompare(b.type, 'fr'));
+          break;
+        case 'surface-asc':
+          sorted.sort((a, b) => parseNumber(a.surface) - parseNumber(b.surface));
+          break;
+        case 'surface-desc':
+          sorted.sort((a, b) => parseNumber(b.surface) - parseNumber(a.surface));
+          break;
+        case 'price-asc':
+          sorted.sort((a, b) => parseNumber(a.price) - parseNumber(b.price));
+          break;
+        case 'price-desc':
+          sorted.sort((a, b) => parseNumber(b.price) - parseNumber(a.price));
+          break;
+      }
+      return sorted;
+    }
+
+    sortSelect.addEventListener('change', render);
+
+    // --- Rendu de la grille ---
+    function render() {
+      let list = PROPERTIES;
+
+      if (selectedStreets.size > 0) {
+        list = list.filter(p => selectedStreets.has(p.slug));
+      }
+
+      list = sortProperties(list);
+
+      grid.innerHTML = '';
+
+      if (list.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'Aucun bien ne correspond à cette sélection.';
+        grid.appendChild(empty);
+        return;
+      }
+
+      list.forEach(prop => {
+        const card = document.createElement('a');
+        card.className = 'prop-card';
+        card.href = 'propriete.html?propriete=' + prop.slug;
+
+        const img = document.createElement('img');
+        img.src = prop.thumb;
+        img.alt = prop.title;
+
+        card.appendChild(img);
+        grid.appendChild(card);
+      });
+    }
+
+    buildLocPanel();
+    updateLocCount();
+    render();
+  </script>
+
+</body>
+</html>
