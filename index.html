@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Livre Blanc - Téléchargez maintenant</title>
-<link rel="icon" type="image/png" href="Images/Favicon LB.png">
+<link rel="icon" type="image/png" href="Images/Logo Favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -117,6 +117,23 @@
     opacity: 0.65;
   }
 
+  /* Bouton menu : masqué par défaut, visible uniquement sur téléphone */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+    line-height: 0;
+  }
+
+  .menu-toggle img {
+    height: clamp(20px, 4vh, 30px);
+    width: auto;
+    display: block;
+  }
+
   /* Bande 2 : verte, titre + sous-titre + bouton + logo */
   .hero-section {
     flex: 0 0 57vh;
@@ -186,7 +203,7 @@
     font-weight: 400;
     font-size: clamp(0.7rem, 0.6vw + 0.9vh, 1.05rem);
     line-height: 1.5;
-    max-width: 125ch;
+    max-width: 480px;
     margin-bottom: clamp(8px, 2vh, 32px);
   }
 
@@ -427,6 +444,126 @@
       margin-bottom: clamp(4px, 1vh, 12px);
     }
   }
+
+  /* =====================================================================
+     VERSION TÉLÉPHONE — tout ce qui suit ne s'applique qu'en dessous de
+     768px de large. L'affichage ordinateur reste strictement inchangé.
+     ===================================================================== */
+  @media (max-width: 768px) {
+
+    /* --- Hauteur des bandes : le plateau prend beaucoup plus de place --- */
+    .band-white-top { flex: 0 0 9vh; z-index: 60; }
+    .hero-section   { flex: 0 0 58vh; }
+    .band-white-mid { flex: 0 0 8vh; }
+    .nav-section    { flex: 0 0 25vh; padding: 0 8px; }
+
+    /* --- En-tête : liens remplacés par l'icône menu --- */
+    .header-bar { padding: 0 16px; gap: 12px; }
+
+    .menu-toggle { display: block; }
+
+    .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 16px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      background-color: var(--bg-cream);
+      border: 1px solid #e3e1dc;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      padding: 6px 0;
+      min-width: 190px;
+      z-index: 61;
+    }
+
+    .top-nav.is-open { display: flex; }
+
+    .top-nav a {
+      display: block;
+      width: 100%;
+      text-align: right;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+    }
+
+    .top-nav a:active { background-color: #efeee9; }
+
+    /* --- Bloc central : titre, plateau, texte, bouton ---
+       display:contents fait remonter h1 / plateau / p / bouton au même
+       niveau afin de pouvoir les ordonner verticalement. */
+    .hero-section {
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding: 12px 20px 14px;
+      gap: 0;
+    }
+
+    .hero-container,
+    .content-wrapper { display: contents; }
+
+    .content-wrapper h1 {
+      order: 1;
+      flex: 0 0 auto;
+      font-size: clamp(1.6rem, 8vw, 2.6rem);
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+
+    .logo-wrapper {
+      order: 2;
+      flex: 1 1 auto;
+      height: auto;
+      min-height: 0;
+      width: 100%;
+      margin: 0 -10px;
+    }
+
+    .logo-wrapper img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: contain;
+    }
+
+    .content-wrapper p {
+      order: 3;
+      flex: 0 0 auto;
+      max-width: none;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin: 6px 0 10px;
+    }
+
+    .btn-download {
+      order: 4;
+      flex: 0 0 auto;
+      align-self: stretch;
+      text-align: center;
+      padding: 13px 18px;
+      font-size: 0.9rem;
+    }
+
+    /* --- Cartes : 2 visibles, flèches conservées --- */
+    .nav-arrow { padding: 4px; }
+    .nav-arrow svg { width: 22px; height: 22px; }
+
+    /* Pas d'assombrissement au survol sur téléphone (uniquement au swipe) */
+    .cards-track:has(.card.is-active) .card:not(.is-active) .card-visual {
+      filter: brightness(0.8);
+    }
+  }
+
+  /* Écran bas et étroit (téléphone en paysage) : on garde titre + bouton */
+  @media (max-width: 768px) and (max-height: 480px) {
+    .content-wrapper p { display: none; }
+    .band-white-top { flex: 0 0 14vh; }
+    .hero-section   { flex: 0 0 56vh; }
+    .band-white-mid { flex: 0 0 5vh; }
+    .nav-section    { flex: 0 0 25vh; }
+  }
 </style>
 </head>
 <body>
@@ -437,7 +574,14 @@
         <div class="brand-logo">
           <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
         </div>
-        <nav class="top-nav">
+
+        <!-- Icône menu : visible uniquement sur téléphone.
+             >>> Remplacer le chemin ci-dessous par celui de ton fichier d'icône <<< -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="topNav">
+          <img src="Images/Menu.png" alt="">
+        </button>
+
+        <nav class="top-nav" id="topNav">
           <a href="réalisations.html">Réalisations</a>
           <a href="contexte.html">Contexte</a>
           <a href="contact.html">Contact</a>
@@ -490,8 +634,17 @@
       { slug: 'rue-cany',          img: 'Images/Propriété_4b.png', alt: 'À vendre — Rue Cany' },
       { slug: 'rue-croix-baragnon',img: 'Images/Propriété_1b.png', alt: 'À vendre — Rue Croix Baragnon' }
     ];
-    const VISIBLE_COUNT = 4;
-    const WINDOW_SIZE = VISIBLE_COUNT + 2; // 1 carte tampon de chaque côté pour la boucle infinie
+
+    // --- Détection du mode téléphone (même seuil que la media query CSS) ---
+    const MOBILE_MQ = window.matchMedia('(max-width: 768px)');
+    const CAN_HOVER = window.matchMedia('(hover: hover)').matches;
+    const isMobile = () => MOBILE_MQ.matches;
+
+    // Réglages qui diffèrent entre ordinateur et téléphone
+    let VISIBLE_COUNT = isMobile() ? 2 : 4;   // cartes visibles
+    let WINDOW_SIZE   = VISIBLE_COUNT + 2;    // 1 carte tampon de chaque côté (boucle infinie)
+    let CARD_GAP      = isMobile() ? 16 : 26; // doit rester synchronisé avec --card-gap
+    let LIFT_RATIO    = isMobile() ? 0.75 : 0.62; // remontée = % de la hauteur de carte
 
     const track = document.getElementById('cardsTrack');
     const btnPrev = document.getElementById('navPrev');
@@ -506,7 +659,11 @@
       return ((n % m) + m) % m;
     }
 
-    // Construit les 7 éléments <a> une seule fois (recyclés à chaque glissement)
+    function closeAllCards() {
+      cardEls.forEach(c => c.classList.remove('is-active'));
+    }
+
+    // Construit les éléments <a> (recyclés à chaque glissement)
     function buildCards() {
       track.innerHTML = '';
       cardEls = [];
@@ -522,13 +679,36 @@
 
         const visual = card.querySelector('.card-visual');
 
-        // Ne se lève que si la souris passe réellement sur la carte visible
-        // (et non sur la zone vide réservée à la remontée, au repos)
-        visual.addEventListener('mouseenter', () => card.classList.add('is-active'));
+        if (CAN_HOVER) {
+          // Ordinateur : ne se lève que si la souris passe réellement sur la carte
+          // visible (et non sur la zone vide réservée à la remontée, au repos)
+          visual.addEventListener('mouseenter', () => card.classList.add('is-active'));
 
-        // Ne redescend que quand la souris quitte entièrement la zone
-        // (repos + surélevée) : évite qu'elle ne se lève/couche en boucle
-        card.addEventListener('mouseleave', () => card.classList.remove('is-active'));
+          // Ne redescend que quand la souris quitte entièrement la zone
+          // (repos + surélevée) : évite qu'elle ne se lève/couche en boucle
+          card.addEventListener('mouseleave', () => card.classList.remove('is-active'));
+        }
+
+        // Téléphone : on relève la carte par un glissement du doigt vers le haut
+        let touchStartY = null;
+        let touchStartX = null;
+        visual.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        visual.addEventListener('touchend', (e) => {
+          if (touchStartY === null) return;
+          const dy = e.changedTouches[0].clientY - touchStartY;
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          touchStartY = null;
+          touchStartX = null;
+          // glissement vers le haut, suffisamment vertical
+          if (dy < -30 && Math.abs(dy) > Math.abs(dx)) {
+            closeAllCards();
+            card.classList.add('is-active');
+          }
+        }, { passive: true });
 
         // Empêche la navigation tant que la carte n'est pas relevée :
         // au repos, la zone de clic ne doit pas rediriger vers la propriété
@@ -556,10 +736,8 @@
     }
 
     const viewport = document.querySelector('.cards-viewport');
-    const CARD_GAP = 26; // doit correspondre à --card-gap (en px)
     const SAFETY_MARGIN = 1; // évite qu'un arrondi ne laisse dépasser une carte supplémentaire
     const CARD_RATIO = 1299 / 1004; // hauteur / largeur
-    const LIFT_RATIO = 0.62; // remontée au survol = 62% de la hauteur de carte
 
     // Calcule la largeur (et la hauteur/remontée) de carte nécessaire pour que les cartes visibles
     // (espacées de CARD_GAP) occupent toute la largeur disponible, sans déborder
@@ -588,9 +766,26 @@
       track.style.transform = 'translateX(' + (-step) + 'px)';
     }
 
+    // Applique le mode courant (4 cartes ordinateur / 2 cartes téléphone)
+    function applyMode() {
+      const wanted = isMobile() ? 2 : 4;
+      if (wanted !== VISIBLE_COUNT || cardEls.length === 0) {
+        VISIBLE_COUNT = wanted;
+        WINDOW_SIZE = VISIBLE_COUNT + 2;
+        CARD_GAP = isMobile() ? 16 : 26;
+        LIFT_RATIO = isMobile() ? 0.75 : 0.62;
+        document.documentElement.style.setProperty('--card-gap', CARD_GAP + 'px');
+        startIndex = 0;
+        buildCards();
+        fillCards();
+      }
+      measureStep();
+    }
+
     function slide(direction) {
       if (isAnimating || step === 0) return;
       isAnimating = true;
+      closeAllCards();
 
       track.classList.remove('no-transition');
       track.style.transform = 'translateX(' + (-step - direction * step) + 'px)';
@@ -610,12 +805,38 @@
     btnPrev.addEventListener('click', () => slide(-1));
     btnNext.addEventListener('click', () => slide(1));
 
-    window.addEventListener('resize', () => {
-      measureStep();
+    // Un appui en dehors d'une carte relevée la recouche
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('.card.is-active')) {
+        closeAllCards();
+      }
     });
 
-    buildCards();
-    fillCards();
+    // --- Menu téléphone ---
+    const menuToggle = document.getElementById('menuToggle');
+    const topNav = document.getElementById('topNav');
+
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = topNav.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    });
+
+    // Un appui ailleurs referme le menu
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('#topNav') && !e.target.closest('#menuToggle')) {
+        topNav.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      applyMode();
+    });
+
+    applyMode();
     requestAnimationFrame(measureStep);
   </script>
 </body>
