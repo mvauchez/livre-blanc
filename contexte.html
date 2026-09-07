@@ -133,6 +133,23 @@
   .pion-wrap img {
     max-height: 60px;
     width: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+  }
+
+  .pion-wrap img.is-shaking {
+    animation: pion-shake 0.28s linear infinite;
+  }
+
+  @keyframes pion-shake {
+    0%   { transform: rotate(0deg) translateX(0); }
+    25%  { transform: rotate(-4deg) translateX(-1px); }
+    50%  { transform: rotate(0deg) translateX(0); }
+    75%  { transform: rotate(4deg) translateX(1px); }
+    100% { transform: rotate(0deg) translateX(0); }
   }
 
   /* Cadre de texte, identique à .intro sur questionnaire.html */
@@ -182,8 +199,11 @@
       <a class="back-btn" href="index.html">&larr; Retour à l'Accueil</a>
 
       <div class="pion-wrap">
-        <img src="Images/Pions/Chapeau.png" alt="Pion Chapeau">
+        <img id="pionImg" src="Images/Pions/Chapeau.png" alt="Pion Chapeau" draggable="false">
       </div>
+
+      <audio id="sonMaintien" src="Sons/Maintien.mp3" loop preload="auto"></audio>
+      <audio id="sonLapin" src="Sons/Lapin.mp3" preload="auto"></audio>
 
       <div class="content-box">
         <h1>Pourquoi ce livre blanc ? 🤷‍♂️</h1>
@@ -197,5 +217,103 @@
     </section>
 
   </div>
+
+  <script>
+    (function () {
+      const pionImg = document.getElementById('pionImg');
+      const sonMaintien = document.getElementById('sonMaintien');
+      const sonLapin = document.getElementById('sonLapin');
+
+      const SRC_CHAPEAU = 'Images/Pions/Chapeau.png';
+      const SRC_LAPIN = 'Images/Pions/Lapin.png';
+      const HOLD_DURATION = 10000; // 10 secondes
+
+      let etat = 'chapeau'; // 'chapeau' | 'lapin'
+      let holdTimer = null;
+      let isHolding = false;
+      let ignorerProchainClic = false;
+
+      function demarrerMaintien() {
+        if (etat !== 'chapeau' || isHolding) return;
+        isHolding = true;
+
+        pionImg.classList.add('is-shaking');
+        sonMaintien.currentTime = 0;
+        sonMaintien.play().catch(() => {});
+
+        holdTimer = setTimeout(() => {
+          transformerEnLapin();
+        }, HOLD_DURATION);
+      }
+
+      function arreterMaintien() {
+        if (!isHolding) return;
+        isHolding = false;
+
+        clearTimeout(holdTimer);
+        holdTimer = null;
+
+        pionImg.classList.remove('is-shaking');
+        sonMaintien.pause();
+        sonMaintien.currentTime = 0;
+      }
+
+      function transformerEnLapin() {
+        isHolding = false;
+        clearTimeout(holdTimer);
+        holdTimer = null;
+
+        pionImg.classList.remove('is-shaking');
+        sonMaintien.pause();
+        sonMaintien.currentTime = 0;
+
+        etat = 'lapin';
+        pionImg.src = SRC_LAPIN;
+        pionImg.alt = 'Pion Lapin';
+
+        // Le relâchement du clic/du doigt à l'issue des 10s va générer un
+        // événement "click" juste après : on l'ignore pour ne pas repasser
+        // instantanément au chapeau.
+        ignorerProchainClic = true;
+      }
+
+      function revenirAuChapeau() {
+        if (etat !== 'lapin') return;
+
+        sonLapin.currentTime = 0;
+        sonLapin.play().catch(() => {});
+
+        etat = 'chapeau';
+        pionImg.src = SRC_CHAPEAU;
+        pionImg.alt = 'Pion Chapeau';
+      }
+
+      function surClic() {
+        if (ignorerProchainClic) {
+          ignorerProchainClic = false;
+          return;
+        }
+        if (etat === 'lapin') {
+          revenirAuChapeau();
+        }
+      }
+
+      // Souris
+      pionImg.addEventListener('mousedown', demarrerMaintien);
+      pionImg.addEventListener('mouseup', arreterMaintien);
+      pionImg.addEventListener('mouseleave', arreterMaintien);
+
+      // Tactile
+      pionImg.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        demarrerMaintien();
+      }, { passive: false });
+      pionImg.addEventListener('touchend', arreterMaintien);
+      pionImg.addEventListener('touchcancel', arreterMaintien);
+
+      // Clic (souris et tactile, une fois le maintien relâché sans avoir déclenché de transformation)
+      pionImg.addEventListener('click', surClic);
+    })();
+  </script>
 </body>
 </html>
