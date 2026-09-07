@@ -281,6 +281,8 @@
        DONNÉES DES PROPRIÉTÉS
        -> Toutes les valeurs ci-dessous sont des PLACEHOLDERS à remplacer.
        -> "mainImage" = photo personnalisée du bien (1ère photo affichée).
+       -> "photos"    = les autres photos propres à CE bien (chemins à coller
+          dans l'ordre voulu, autant de lignes que nécessaire).
        -> "color"     = couleur associée au bien (cadre des petites cases de
           caractéristiques, dans le panneau blanc).
        -> Les pages ne sont PAS reliées entre elles : depuis cette page on ne
@@ -296,7 +298,14 @@
         type: 'Appartement',                               // PLACEHOLDER
         info: 'Ce superbe appartement T4 au dernier étage à une vue magnifique sur la rue de Metz et la cathédrale Saint-Etienne.', // PLACEHOLDER
         color: '#22a54c',
-        mainImage: 'Images/PPT METZ.png'
+        mainImage: 'Images/PPT METZ.png',
+        // Photos supplémentaires propres à ce bien, dans l'ordre d'affichage.
+        // Ajoute/enlève autant de lignes que nécessaire.
+        photos: [
+          'Images/Photos_Biens/PPT Metz Bureau New.png',
+          'Images/Photos_Biens/PPT Metz Chambre New.png',
+          'Images/Photos_Biens/PPT Metz Cuisine New.png'
+        ]
       },
       {
         slug: 'rue-tolosane',
@@ -307,7 +316,13 @@
         type: 'Appartement',
         info: 'Cet appartement T2 au charme fou situé au RDC donne vue sur une magnifique cours très bien entretenue et arborée.',
         color: '#e3030d',
-        mainImage: 'Images/PPT TOLOSANE.jpg'
+        mainImage: 'Images/PPT TOLOSANE.jpg',
+        photos: [
+          'Images/Photos_Biens/PPT TOLOSANE photo1.png',
+          'Images/Photos_Biens/PPT TOLOSANE photo2.jpg',
+          'Images/Photos_Biens/PPT TOLOSANE photo3.png',
+          'Images/Photos_Biens/PPT TOLOSANE photo4.jpg'
+        ]
       },
       {
         slug: 'rue-mage',
@@ -318,7 +333,11 @@
         type: 'Bureau',
         info: 'Ce <b>bureau</b> très bien positionné dans le quartier des <b>Carmes</b> à tout pour être le bureau de vos rêves : espace, moderne, <b>cave</b> en plus.',
         color: '#ffed00',
-        mainImage: 'Images/PPT MAGE.png'
+        mainImage: 'Images/PPT MAGE.png',
+        photos: [
+          'Images/Photos_Biens/PPT-MAGE-photo1.png',
+          'Images/Photos_Biens/PPT-MAGE-photo-2.png'
+        ]
       },
       {
         slug: 'impasse-ampere',
@@ -329,7 +348,11 @@
         type: 'Maison',
         info: 'Cette jolie maison située dans le quartier de Pech David possède le charme de l’ancien. Elle contient aussi un terrain en plus de son grand jardin.',
         color: '#d73089',
-        mainImage: 'Images/PPT AMPèRE.png'
+        mainImage: 'Images/PPT AMPèRE.png',
+        photos: [
+          'Images/Photos_Biens/PPT-AMPèRE-photo1.png',
+          'Images/Photos_Biens/PPT-AMPèRE-photo2.png'
+                ]
       },
       {
         slug: 'rue-cany',
@@ -340,7 +363,12 @@
         type: 'Appartement',
         info: 'Cette jolie maison située dans le quartier Fer à Cheval tout juste construite offre un beau cadre avec sa terrasse et son jardin.',
         color: '#bae2fb',
-        mainImage: 'Images/PPT Cany.png'
+        mainImage: 'Images/PPT Cany.png',
+        photos: [
+          'Images/Photos_Biens/PPT-Cany-photo1.png',
+          'Images/Photos_Biens/PPT-Cany-photo2-.png',
+          'Images/Photos_Biens/PPT-Cany-photo3.png'
+        ]
       },
       {
         slug: 'rue-croix-baragnon',
@@ -351,18 +379,12 @@
         type: 'Maison',
         info: 'Cet appartement T3 se situe dans l’une des rues les plus prisées de Toulouse. Côté rue, il donne vue sur la prestigieuse Rue Croix Baragnon.',
         color: '#036ab3',
-        mainImage: 'Images/PPT CROIX BARAGNON.png'
+        mainImage: 'Images/PPT CROIX BARAGNON.png',
+        photos: [
+          'Images/Photos_Biens/PPT CROIX BARAGNON photo1.png',
+          'Images/Photos_Biens/PPT-CROIX-BARAGNON-photo2.png'
+        ]
       }
-    ];
-
-    /* Photos génériques communes à tous les biens, ajoutées après la photo
-       personnalisée dans le parcours des flèches de la galerie. */
-    const GENERIC_PHOTOS = [
-      'Images/BIENa.png',
-      'Images/BIENb.png',
-      'Images/BIENc.png',
-      'Images/BIENd.png',
-      'Images/BIENe.png'
     ];
 
     function mod(n, m) { return ((n % m) + m) % m; }
@@ -374,7 +396,7 @@
 
     const params = new URLSearchParams(window.location.search);
     const property = PROPERTIES[findIndex(params.get('propriete'))];
-    const photos = [property.mainImage, ...GENERIC_PHOTOS];
+    const photos = [property.mainImage, ...property.photos];
     let photoIndex = 0;
 
     const mainPhoto = document.getElementById('mainPhoto');
