@@ -131,7 +131,7 @@
   }
 
   .pion-wrap img {
-    max-height: 60px;
+    max-height: 80px;
     width: auto;
     cursor: pointer;
   }
@@ -197,10 +197,10 @@
 
 <script>
   // === Sons du pion (clic) : à compléter avec les chemins réels ===
+  // Boucle stricte : audio 1, puis audio 2, puis audio 1, etc.
   const PION_SONS = [
-    "Sons/Cat sound state1.wav",
-    "Sons/Sound Effect Voix LB.m4a",
-    "Sons/Sound Effect Voix LB 2.m4a"
+    "Sons/Sound Effect Voix LB.mp3",
+    "Sons/Sound Effect Voix LB 2.mp3"
   ];
   // ===================================================================
 
@@ -214,6 +214,7 @@
 
   const pionContact = document.getElementById('pionContact');
   let pionEnCours = false;
+  let pionIndex = 0; // index du prochain son à jouer (alterne 0,1,0,1,...)
 
   function debloquerPion() {
     pionEnCours = false;
@@ -223,7 +224,8 @@
     if (pionEnCours) return; // le son en cours ne peut pas être coupé
 
     pionEnCours = true;
-    const son = pionAudios[Math.floor(Math.random() * pionAudios.length)];
+    const son = pionAudios[pionIndex];
+    pionIndex = (pionIndex + 1) % pionAudios.length;
     son.currentTime = 0;
 
     son.addEventListener('ended', debloquerPion, { once: true });
