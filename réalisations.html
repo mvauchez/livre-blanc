@@ -133,6 +133,9 @@
   .pion-wrap img {
     max-height: 60px;
     width: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 
   /* Cadre de texte, identique à .intro sur questionnaire.html */
@@ -182,7 +185,7 @@
       <a class="back-btn" href="index.html">&larr; Retour à l'Accueil</a>
 
       <div class="pion-wrap">
-        <img src="Images/Pions/Voiture.png" alt="Pion Voiture">
+        <img id="pionVoiture" src="Images/Pions/Voiture.png" alt="Pion Voiture">
       </div>
 
       <div class="content-box">
@@ -192,5 +195,45 @@
     </section>
 
   </div>
+
+  <script>
+    const pion = document.getElementById('pionVoiture');
+
+    const SEUIL_FLAMMES = 8;
+    const IMG_NORMAL = 'Images/Pions/Voiture.png';
+    const IMG_FLAMMES = 'Images/Pions/Voiture-state2.png';
+    const SON_NORMAL = 'Sons/son1.mp3';
+    const SON_TRANSITION = 'Sons/son2.mp3';
+    const SON_FLAMMES = 'Sons/son3.mp3';
+
+    let clics = 0;
+    let enFlammes = false;
+
+    function jouerSon(src) {
+      const audio = new Audio(src);
+      audio.play().catch(() => {});
+    }
+
+    pion.addEventListener('click', () => {
+      if (enFlammes) {
+        // État 2 : la voiture est déjà en flammes, chaque clic rejoue le 3e son
+        jouerSon(SON_FLAMMES);
+        return;
+      }
+
+      clics++;
+
+      if (clics >= SEUIL_FLAMMES) {
+        // 8e clic : la voiture passe à l'état 2
+        jouerSon(SON_TRANSITION);
+        pion.src = IMG_FLAMMES;
+        pion.alt = 'Pion Voiture en flammes';
+        enFlammes = true;
+      } else {
+        // Clics 1 à 7 : état normal
+        jouerSon(SON_NORMAL);
+      }
+    });
+  </script>
 </body>
 </html>
