@@ -92,13 +92,14 @@
     border: 2px solid var(--text-dark);
     display: flex;
     align-items: stretch;
-    flex-wrap: wrap;
     margin-bottom: clamp(24px, 4vh, 40px);
   }
 
   .toolbar-group {
+    flex: 1 1 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     padding: 14px 22px;
     position: relative;
@@ -130,7 +131,11 @@
   }
 
   .toolbar-localisation {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+  }
+
+  .toolbar-type {
+    flex: 1 1 0;
   }
 
   .loc-toggle {
@@ -139,9 +144,11 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     color: var(--text-dark);
     padding: 0;
+    white-space: nowrap;
   }
 
   .loc-toggle .chevron {
@@ -168,7 +175,8 @@
   .loc-panel {
     position: absolute;
     top: calc(100% + 8px);
-    left: 22px;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #ffffff;
     border: 2px solid var(--text-dark);
     padding: 14px 18px;
@@ -247,6 +255,7 @@
   @media (max-width: 680px) {
     .properties-grid { grid-template-columns: repeat(2, 1fr); }
     .toolbar { flex-direction: column; }
+    .toolbar-group { flex: 1 1 auto; justify-content: flex-start; }
     .toolbar-divider { width: 100%; height: 2px; }
   }
 
@@ -269,13 +278,12 @@
     <div class="green-area">
       <div class="green-inner">
 
-        <h1 class="page-title">Nos réalisations</h1>
+        <h1 class="page-title">Nos biens</h1>
 
         <div class="toolbar">
           <div class="toolbar-group">
             <label for="sortSelect">Classer par</label>
             <select id="sortSelect">
-              <option value="type">Type de biens</option>
               <option value="surface-asc">Superficie (petite à grande)</option>
               <option value="surface-desc">Superficie (grande à petite)</option>
               <option value="price-asc">Prix (croissant)</option>
@@ -291,6 +299,16 @@
               <span class="chevron"></span>
             </button>
             <div class="loc-panel" id="locPanel" hidden></div>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <div class="toolbar-group toolbar-type">
+            <button class="loc-toggle" id="typeToggle" aria-expanded="false">
+              Type de biens <span class="loc-count" id="typeCount"></span>
+              <span class="chevron"></span>
+            </button>
+            <div class="loc-panel" id="typePanel" hidden></div>
           </div>
         </div>
 
@@ -340,8 +358,13 @@
     const locToggle = document.getElementById('locToggle');
     const locPanel = document.getElementById('locPanel');
     const locCount = document.getElementById('locCount');
+    const typeToggle = document.getElementById('typeToggle');
+    const typePanel = document.getElementById('typePanel');
+    const typeCount = document.getElementById('typeCount');
 
     let selectedStreets = new Set(); // vide = toutes les rues affichées
+    let selectedTypes = new Set(); // vide = tous les types affichés
+    const PROPERTY_TYPES = ['Maison', 'Appartement', 'Bureau'];
 
     // --- Construction du panneau "Localisation" à partir des biens existants ---
     function buildLocPanel() {
@@ -378,16 +401,56 @@
       locCount.textContent = selectedStreets.size > 0 ? '(' + selectedStreets.size + ')' : '';
     }
 
+    // --- Construction du panneau "Type de biens" ---
+    function buildTypePanel() {
+      typePanel.innerHTML = '';
+      PROPERTY_TYPES.forEach(type => {
+        const label = document.createElement('label');
+        label.className = 'loc-option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = type;
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) selectedTypes.add(type);
+          else selectedTypes.delete(type);
+          updateTypeCount();
+          render();
+        });
+
+        const text = document.createElement('span');
+        text.textContent = type;
+
+        label.appendChild(checkbox);
+        label.appendChild(text);
+        typePanel.appendChild(label);
+      });
+    }
+
+    function updateTypeCount() {
+      typeCount.textContent = selectedTypes.size > 0 ? '(' + selectedTypes.size + ')' : '';
+    }
+
     locToggle.addEventListener('click', () => {
       const isOpen = locToggle.getAttribute('aria-expanded') === 'true';
       locToggle.setAttribute('aria-expanded', String(!isOpen));
       locPanel.hidden = isOpen;
     });
 
+    typeToggle.addEventListener('click', () => {
+      const isOpen = typeToggle.getAttribute('aria-expanded') === 'true';
+      typeToggle.setAttribute('aria-expanded', String(!isOpen));
+      typePanel.hidden = isOpen;
+    });
+
     document.addEventListener('click', (e) => {
       if (!locToggle.contains(e.target) && !locPanel.contains(e.target)) {
         locToggle.setAttribute('aria-expanded', 'false');
         locPanel.hidden = true;
+      }
+      if (!typeToggle.contains(e.target) && !typePanel.contains(e.target)) {
+        typeToggle.setAttribute('aria-expanded', 'false');
+        typePanel.hidden = true;
       }
     });
 
@@ -397,9 +460,6 @@
       const sorted = [...list];
 
       switch (mode) {
-        case 'type':
-          sorted.sort((a, b) => a.type.localeCompare(b.type, 'fr'));
-          break;
         case 'surface-asc':
           sorted.sort((a, b) => parseNumber(a.surface) - parseNumber(b.surface));
           break;
@@ -424,6 +484,10 @@
 
       if (selectedStreets.size > 0) {
         list = list.filter(p => selectedStreets.has(p.slug));
+      }
+
+      if (selectedTypes.size > 0) {
+        list = list.filter(p => selectedTypes.has(p.type));
       }
 
       list = sortProperties(list);
@@ -453,7 +517,9 @@
     }
 
     buildLocPanel();
+    buildTypePanel();
     updateLocCount();
+    updateTypeCount();
     render();
   </script>
 
