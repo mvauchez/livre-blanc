@@ -136,6 +136,11 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-drag: none;
+    transition: max-height .25s ease;
+  }
+
+  .pion-wrap img.en-flammes {
+    max-height: 90px;
   }
 
   /* Cadre de texte, identique à .intro sur questionnaire.html */
@@ -264,6 +269,7 @@
         jouerSon(SON_TRANSITION);
         pion.src = IMG_FLAMMES;
         pion.alt = 'Pion Voiture en flammes';
+        pion.classList.add('en-flammes');
         enFlammes = true;
       } else {
         // Clics 1 à 7 : état normal
