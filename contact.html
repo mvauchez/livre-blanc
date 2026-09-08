@@ -161,6 +161,20 @@
   .content-box p:last-child {
     margin-bottom: 0;
   }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin: 14px 0;
+  }
+
+  .contact-links a img {
+    height: 48px;
+    width: auto;
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -190,12 +204,14 @@
         <h1>Une question ? Un projet ? Parlons-en. 🧑‍💻</h1>
         <p>Vous souhaitez échanger autour de la gamification, de la communication immobilière ou simplement me faire un retour sur ce livre blanc ?</p>
         <p>Retrouvez-moi ou contactez-moi directement :</p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br> 
+        <div class="contact-links">
+          <a href="https://www.linkedin.com" target="_blank" rel="noopener">
+            <img src="Images/Logos/Linkedin logo.png" alt="LinkedIn">
+          </a>
+          <a href="mailto:ex@example.com">
+            <img src="Images/Logos/Mail logo.png" alt="Mail">
+          </a>
+        </div>
         <p>La partie ne s’arrête pas ici. 🎲</p><br>
         <p>Une idée, une question ou un projet ? Je suis toujours partant pour en discuter.</p>
       </div>
