@@ -133,14 +133,17 @@
   }
 
   .pion-wrap img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
+    max-height: 60px;
+    width: auto;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
     -webkit-touch-callout: none;
+  }
+
+  .pion-wrap img.is-lapin {
+    max-height: 90px;
   }
 
   .pion-wrap img.is-shaking {
@@ -205,8 +208,8 @@
         <img id="pionImg" src="Images/Pions/Chapeau.png" alt="Pion Chapeau" draggable="false">
       </div>
 
-      <audio id="sonMaintien" src="Sons/scintillement.mp3" preload="auto"></audio>
-      <audio id="sonLapin" src="Sons/Lapin.mp3" preload="auto"></audio>
+      <audio id="sonMaintien" src="Sons/scintillement & appearance.wav" preload="auto"></audio>
+      <audio id="sonLapin" src="Sons/Applause Sound Effect.mp3" preload="auto"></audio>
 
       <div class="content-box">
         <h1>Pourquoi ce livre blanc ? 🤷‍♂️</h1>
@@ -276,6 +279,7 @@
         holdTimer = null;
 
         pionImg.classList.remove('is-shaking');
+        pionImg.classList.add('is-lapin');
         pionImg.src = SRC_LAPIN;
         pionImg.alt = 'Pion Lapin';
         // sonMaintien continue de jouer jusqu'à sa fin naturelle.
@@ -293,6 +297,7 @@
       sonLapin.addEventListener('ended', () => {
         if (etat !== 'sequence') return;
         etat = 'chapeau';
+        pionImg.classList.remove('is-lapin');
         pionImg.src = SRC_CHAPEAU;
         pionImg.alt = 'Pion Chapeau';
       });
