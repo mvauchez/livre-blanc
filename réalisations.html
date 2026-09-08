@@ -136,6 +136,11 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-drag: none;
+    transition: max-height .25s ease;
+  }
+
+  .pion-wrap img.en-flammes {
+    max-height: 90px;
   }
 
   /* Cadre de texte, identique à .intro sur questionnaire.html */
@@ -240,7 +245,7 @@
     const IMG_FLAMMES = 'Images/Pions/Smoking car.png';
     const SON_NORMAL = 'Sons/Road Runner Beep Beep.wav';
     const SON_TRANSITION = 'Sons/Crash sound cartoon2.wav';
-    const SON_FLAMMES = 'Sons/son3.mp3';
+    const SON_FLAMMES = 'Sons/Car-state3.wav';
 
     let clics = 0;
     let enFlammes = false;
@@ -264,6 +269,7 @@
         jouerSon(SON_TRANSITION);
         pion.src = IMG_FLAMMES;
         pion.alt = 'Pion Voiture en flammes';
+        pion.classList.add('en-flammes');
         enFlammes = true;
       } else {
         // Clics 1 à 7 : état normal
