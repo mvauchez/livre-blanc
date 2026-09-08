@@ -172,8 +172,6 @@
   }
   .logo-wrap img {
     cursor: pointer;
-    position: relative;
-    z-index: 1000;
   }
   #catMessage {
     display: none;
@@ -181,7 +179,7 @@
     font-size: 13px;
     font-style: normal;
     font-weight: bold;
-    color: #cc0000;
+    color: #601a1e;
     margin-top: 8px;
     position: relative;
     z-index: 1000;
@@ -393,20 +391,12 @@
   const catLogo = document.getElementById('catLogo');
   const catOverlay = document.getElementById('catOverlay');
   const catMessage = document.getElementById('catMessage');
-  const CAT_CLICK_COOLDOWN = 1500; // 1.5 secondes
   const CAT_CLICKS_NEEDED = 7;
   let catClickCount = 0;
   let catIsAngry = false;
-  let lastCatClickTime = 0;
 
   catLogo.addEventListener('click', function() {
     if (catIsAngry) return;
-
-    const now = Date.now();
-    if (now - lastCatClickTime < CAT_CLICK_COOLDOWN) {
-      return; // clic ignoré : trop rapproché du précédent
-    }
-    lastCatClickTime = now;
 
     catClickCount++;
 
