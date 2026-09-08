@@ -282,7 +282,7 @@
     <div class="green-area">
       <div class="green-inner">
 
-        <h1 class="page-title">Nos biens</h1>
+        <h1 class="page-title">Nos propriétés</h1>
 
         <div class="toolbar">
           <div class="toolbar-group">
@@ -334,20 +334,13 @@
           (ex: "Images/Cases/Case METZ.png").
        ========================================================================= */
     const PROPERTIES = [
-      {
-        slug: 'rue-de-metz',
-        title: 'Rue de Metz',
-        price: '- €',        // PLACEHOLDER — reprendre la valeur de propriete.html
-        surface: '164 m²',   // PLACEHOLDER — reprendre la valeur de propriete.html
-        type: 'Appartement',
-        color: '#22a54c',
-        thumb: 'Images/Cases/Case METZ.png'
-      }
-      // ,{ slug: 'rue-tolosane', title: 'Rue Tolosane', price: '- €', surface: '52 m²', type: 'Appartement', color: '#e3030d', thumb: 'Images/Cases/Case TOLOSANE.png' }
-      // ,{ slug: 'rue-mage', title: 'Rue Mage', price: '- €', surface: '165 m²', type: 'Bureau', color: '#ffed00', thumb: 'Images/Cases/Case MAGE.png' }
-      // ,{ slug: 'impasse-ampere', title: 'Impasse Ampère', price: '- €', surface: '96 m²', type: 'Maison', color: '#d73089', thumb: 'Images/Cases/Case AMPERE.png' }
-      // ,{ slug: 'rue-cany', title: 'Rue Cany', price: '- €', surface: '86 m²', type: 'Appartement', color: '#bae2fb', thumb: 'Images/Cases/Case CANY.png' }
-      // ,{ slug: 'rue-croix-baragnon', title: 'Rue Croix Baragnon', price: '-€', surface: '62 m²', type: 'Maison', color: '#036ab3', thumb: 'Images/Cases/Case CROIX BARAGNON.png' }
+      { slug: 'rue-de-metz', title: 'Rue de Metz', price: '- €', surface: '164 m²', type: 'Appartement', color: '#22a54c', thumb: 'Images/Cases/Case METZ.png' },
+      { slug: 'avenue-lagarde', title: 'Avenue de Lagarde', price: '- €', surface: '739 m²', type: 'Bureau', color: '#f69003', thumb: 'Images/Cases/Case LAGARDE.png' },
+      // { slug: 'rue-tolosane', title: 'Rue Tolosane', price: '- €', surface: '52 m²', type: 'Appartement', color: '#e3030d', thumb: 'Images/Cases/Case TOLOSANE.png' },
+      { slug: 'rue-mage', title: 'Rue Mage', price: '- €', surface: '165 m²', type: 'Bureau', color: '#ffed00', thumb: 'Images/Cases/Case MAGE.png' },
+      { slug: 'impasse-ampere', title: 'Impasse Ampère', price: '- €', surface: '96 m²', type: 'Maison', color: '#d73089', thumb: 'Images/Cases/Case AMPERE.png' },
+      { slug: 'rue-cany', title: 'Rue Cany', price: '- €', surface: '86 m²', type: 'Appartement', color: '#bae2fb', thumb: 'Images/Cases/Case CANY.png' },
+      { slug: 'rue-croix-baragnon', title: 'Rue Croix Baragnon', price: '-€', surface: '62 m²', type: 'Maison', color: '#036ab3', thumb: 'Images/Cases/Case CROIX BARAGNON.png' }
     ];
 
     // Extrait un nombre depuis "164 m²" ou "- €" (renvoie NaN si aucun chiffre)
