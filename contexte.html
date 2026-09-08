@@ -178,10 +178,88 @@
     font-size: 14px;
     line-height: 1.6;
     margin: 0 0 14px 0;
+    text-align: justify;
   }
 
   .content-box p:last-child {
     margin-bottom: 0;
+  }
+
+  /* --- Logo cliquable (retour accueil) : desktop + mobile --- */
+  .logo-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* --- Bouton menu (identique à index.html / réalisations.html) : masqué par défaut (desktop) --- */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+    line-height: 0;
+  }
+
+  .menu-toggle img {
+    height: clamp(20px, 4vh, 30px);
+    width: auto;
+    display: block;
+  }
+
+  /* --- Version mobile --- */
+  @media (max-width: 768px) {
+    .header-bar {
+      position: relative;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .back-btn {
+      display: none;
+    }
+
+    .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 16px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      background-color: var(--bg-cream);
+      border: 1px solid #e3e1dc;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      padding: 14px 0;
+      min-width: 190px;
+      z-index: 61;
+    }
+
+    .top-nav.is-open {
+      display: flex;
+    }
+
+    .top-nav a {
+      display: block;
+      width: 100%;
+      text-align: right;
+      padding: 18px 22px;
+      font-size: 0.95rem;
+    }
+
+    .top-nav a:active {
+      background-color: #efeee9;
+    }
+
+    .pion-wrap {
+      margin-top: 30px;
+    }
   }
 </style>
 </head>
@@ -191,13 +269,18 @@
     <div class="band-white-top">
       <div class="header-bar">
         <div class="brand-logo">
-          <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
+          <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
+          </a>
         </div>
-        <nav class="top-nav">
+        <nav class="top-nav" id="topNav">
           <a href="réalisations.html">Réalisations</a>
           <a href="contexte.html" class="active">Contexte</a>
           <a href="contact.html">Contact</a>
         </nav>
+        <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="topNav">
+          <img src="Images/Menu.png" alt="">
+        </button>
       </div>
     </div>
 
@@ -225,6 +308,26 @@
   </div>
 
   <script>
+    // --- Menu mobile (identique à index.html / réalisations.html) ---
+    const menuToggle = document.getElementById('menuToggle');
+    const topNav = document.getElementById('topNav');
+
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = topNav.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    });
+
+    // Un appui ailleurs referme le menu
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('#topNav') && !e.target.closest('#menuToggle')) {
+        topNav.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+      }
+    });
+
     (function () {
       const pionImg = document.getElementById('pionImg');
       const sonMaintien = document.getElementById('sonMaintien');
