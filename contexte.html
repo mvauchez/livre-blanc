@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="Images/Pions/Chapeau.png">
+<link rel="preload" as="image" href="Images/Pions/Lapin.png">
 <style>
   :root {
     --bg-cream: #faf9f7;
@@ -131,8 +133,9 @@
   }
 
   .pion-wrap img {
-    max-height: 60px;
-    width: auto;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
@@ -202,7 +205,7 @@
         <img id="pionImg" src="Images/Pions/Chapeau.png" alt="Pion Chapeau" draggable="false">
       </div>
 
-      <audio id="sonMaintien" src="Sons/scintillement & appearance.wav" preload="auto"></audio>
+      <audio id="sonMaintien" src="Sons/scintillement.mp3" preload="auto"></audio>
       <audio id="sonLapin" src="Sons/Lapin.mp3" preload="auto"></audio>
 
       <div class="content-box">
@@ -227,6 +230,14 @@
       const SRC_CHAPEAU = 'Images/Pions/Chapeau.png';
       const SRC_LAPIN = 'Images/Pions/Lapin.png';
       const HOLD_DURATION = 5060; // 5 secondes et 6 centièmes
+
+      // Précharge les deux images dès l'arrivée sur la page : sans ça, le
+      // navigateur ne télécharge Lapin.png qu'au moment où on l'affiche,
+      // ce qui retarde visiblement son apparition après le seuil de maintien.
+      [SRC_CHAPEAU, SRC_LAPIN].forEach((src) => {
+        const im = new Image();
+        im.src = src;
+      });
 
       // 'chapeau'  : au repos, interactif
       // 'attente'  : maintien en cours, seuil pas encore atteint (interruptible)
