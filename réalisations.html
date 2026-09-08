@@ -185,62 +185,40 @@
     margin-bottom: 10px;
   }
 
-  /* --- Logo cliquable (retour accueil) : actif seulement en mobile --- */
+  /* --- Logo cliquable (retour accueil) : desktop + mobile --- */
   .logo-link {
     display: block;
     text-decoration: none;
-    pointer-events: none;
-    cursor: default;
+    cursor: pointer;
   }
 
-  /* --- Bouton menu (hamburger) : masqué par défaut (desktop) --- */
+  /* --- Bouton menu (identique à index.html) : masqué par défaut (desktop) --- */
   .menu-toggle {
     display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 32px;
-    height: 32px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
-    flex: 0 0 auto;
+    padding: 6px;
+    margin-left: auto;
+    line-height: 0;
   }
 
-  .menu-toggle span {
+  .menu-toggle img {
+    height: clamp(20px, 4vh, 30px);
+    width: auto;
     display: block;
-    width: 100%;
-    height: 2px;
-    background-color: var(--text-dark);
-    transition: transform .25s ease, opacity .25s ease;
-  }
-
-  .menu-toggle.open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-
-  .menu-toggle.open span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .menu-toggle.open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
   }
 
   /* --- Version mobile --- */
   @media (max-width: 768px) {
     .header-bar {
       position: relative;
-    }
-
-    .logo-link {
-      pointer-events: auto;
-      cursor: pointer;
+      padding: 0 16px;
+      gap: 12px;
     }
 
     .menu-toggle {
-      display: flex;
+      display: block;
     }
 
     .back-btn {
@@ -250,20 +228,37 @@
     .top-nav {
       display: none;
       position: absolute;
-      top: calc(100% + 12px);
-      right: clamp(20px, 4vw, 40px);
+      top: 100%;
+      right: 16px;
       flex-direction: column;
       align-items: flex-end;
-      gap: 16px;
+      gap: 0;
       background-color: var(--bg-cream);
-      border: 1px solid #00000022;
-      padding: 18px 22px;
-      z-index: 30;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      border: 1px solid #e3e1dc;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      padding: 14px 0;
+      min-width: 190px;
+      z-index: 61;
     }
 
-    .top-nav.open {
+    .top-nav.is-open {
       display: flex;
+    }
+
+    .top-nav a {
+      display: block;
+      width: 100%;
+      text-align: right;
+      padding: 18px 22px;
+      font-size: 0.95rem;
+    }
+
+    .top-nav a:active {
+      background-color: #efeee9;
+    }
+
+    .pion-wrap {
+      margin-top: 40px;
     }
   }
 </style>
@@ -284,7 +279,7 @@
           <a href="contact.html">Contact</a>
         </nav>
         <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="topNav">
-          <span></span><span></span><span></span>
+          <img src="Images/Menu.png" alt="">
         </button>
       </div>
     </div>
@@ -336,23 +331,24 @@
   </div>
 
   <script>
-    // --- Menu mobile (hamburger) ---
+    // --- Menu mobile (identique à index.html) ---
     const menuToggle = document.getElementById('menuToggle');
     const topNav = document.getElementById('topNav');
 
-    menuToggle.addEventListener('click', () => {
-      const isOpen = topNav.classList.toggle('open');
-      menuToggle.classList.toggle('open', isOpen);
-      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = topNav.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
     });
 
-    // Ferme le menu après avoir choisi un lien
-    topNav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        topNav.classList.remove('open');
-        menuToggle.classList.remove('open');
+    // Un appui ailleurs referme le menu
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('#topNav') && !e.target.closest('#menuToggle')) {
+        topNav.classList.remove('is-open');
         menuToggle.setAttribute('aria-expanded', 'false');
-      });
+        menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+      }
     });
 
     const pion = document.getElementById('pionVoiture');
