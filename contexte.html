@@ -202,7 +202,7 @@
         <img id="pionImg" src="Images/Pions/Chapeau.png" alt="Pion Chapeau" draggable="false">
       </div>
 
-      <audio id="sonMaintien" src="Sons/scintillement.mp3" loop preload="auto"></audio>
+      <audio id="sonMaintien" src="Sons/scintillement & appearance.wav" preload="auto"></audio>
       <audio id="sonLapin" src="Sons/Lapin.mp3" preload="auto"></audio>
 
       <div class="content-box">
@@ -226,29 +226,31 @@
 
       const SRC_CHAPEAU = 'Images/Pions/Chapeau.png';
       const SRC_LAPIN = 'Images/Pions/Lapin.png';
-      const HOLD_DURATION = 10000; // 10 secondes
+      const HOLD_DURATION = 5060; // 5 secondes et 6 centièmes
 
-      let etat = 'chapeau'; // 'chapeau' | 'lapin'
+      // 'chapeau'  : au repos, interactif
+      // 'attente'  : maintien en cours, seuil pas encore atteint (interruptible)
+      // 'sequence' : seuil atteint, lapin visible, audio1 puis audio2 en cours
+      //              (automatique, non interruptible par le relâchement/clic)
+      let etat = 'chapeau';
       let holdTimer = null;
-      let isHolding = false;
-      let ignorerProchainClic = false;
 
       function demarrerMaintien() {
-        if (etat !== 'chapeau' || isHolding) return;
-        isHolding = true;
+        if (etat !== 'chapeau') return;
+        etat = 'attente';
 
         pionImg.classList.add('is-shaking');
         sonMaintien.currentTime = 0;
         sonMaintien.play().catch(() => {});
 
-        holdTimer = setTimeout(() => {
-          transformerEnLapin();
-        }, HOLD_DURATION);
+        holdTimer = setTimeout(demarrerSequence, HOLD_DURATION);
       }
 
-      function arreterMaintien() {
-        if (!isHolding) return;
-        isHolding = false;
+      function annulerMaintien() {
+        // Ne fait rien si le seuil est déjà atteint : la séquence continue
+        // toute seule, indépendamment du maintien.
+        if (etat !== 'attente') return;
+        etat = 'chapeau';
 
         clearTimeout(holdTimer);
         holdTimer = null;
@@ -258,61 +260,44 @@
         sonMaintien.currentTime = 0;
       }
 
-      function transformerEnLapin() {
-        isHolding = false;
-        clearTimeout(holdTimer);
+      function demarrerSequence() {
+        etat = 'sequence';
         holdTimer = null;
 
         pionImg.classList.remove('is-shaking');
-        sonMaintien.pause();
-        sonMaintien.currentTime = 0;
-
-        etat = 'lapin';
         pionImg.src = SRC_LAPIN;
         pionImg.alt = 'Pion Lapin';
-
-        // Le relâchement du clic/du doigt à l'issue des 10s va générer un
-        // événement "click" juste après : on l'ignore pour ne pas repasser
-        // instantanément au chapeau.
-        ignorerProchainClic = true;
+        // sonMaintien continue de jouer jusqu'à sa fin naturelle.
       }
 
-      function revenirAuChapeau() {
-        if (etat !== 'lapin') return;
-
+      // Quand l'audio 1 se termine, l'audio 2 démarre automatiquement.
+      sonMaintien.addEventListener('ended', () => {
+        if (etat !== 'sequence') return;
         sonLapin.currentTime = 0;
         sonLapin.play().catch(() => {});
+      });
 
+      // Quand l'audio 2 se termine, le lapin laisse place au chapeau
+      // et la boucle peut recommencer.
+      sonLapin.addEventListener('ended', () => {
+        if (etat !== 'sequence') return;
         etat = 'chapeau';
         pionImg.src = SRC_CHAPEAU;
         pionImg.alt = 'Pion Chapeau';
-      }
-
-      function surClic() {
-        if (ignorerProchainClic) {
-          ignorerProchainClic = false;
-          return;
-        }
-        if (etat === 'lapin') {
-          revenirAuChapeau();
-        }
-      }
+      });
 
       // Souris
       pionImg.addEventListener('mousedown', demarrerMaintien);
-      pionImg.addEventListener('mouseup', arreterMaintien);
-      pionImg.addEventListener('mouseleave', arreterMaintien);
+      pionImg.addEventListener('mouseup', annulerMaintien);
+      pionImg.addEventListener('mouseleave', annulerMaintien);
 
       // Tactile
       pionImg.addEventListener('touchstart', (e) => {
         e.preventDefault();
         demarrerMaintien();
       }, { passive: false });
-      pionImg.addEventListener('touchend', arreterMaintien);
-      pionImg.addEventListener('touchcancel', arreterMaintien);
-
-      // Clic (souris et tactile, une fois le maintien relâché sans avoir déclenché de transformation)
-      pionImg.addEventListener('click', surClic);
+      pionImg.addEventListener('touchend', annulerMaintien);
+      pionImg.addEventListener('touchcancel', annulerMaintien);
     })();
   </script>
 </body>
