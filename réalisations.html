@@ -184,6 +184,88 @@
     display: block;
     margin-bottom: 10px;
   }
+
+  /* --- Logo cliquable (retour accueil) : actif seulement en mobile --- */
+  .logo-link {
+    display: block;
+    text-decoration: none;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* --- Bouton menu (hamburger) : masqué par défaut (desktop) --- */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    flex: 0 0 auto;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-dark);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+
+  .menu-toggle.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* --- Version mobile --- */
+  @media (max-width: 768px) {
+    .header-bar {
+      position: relative;
+    }
+
+    .logo-link {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+
+    .back-btn {
+      display: none;
+    }
+
+    .top-nav {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      right: clamp(20px, 4vw, 40px);
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+      background-color: var(--bg-cream);
+      border: 1px solid #00000022;
+      padding: 18px 22px;
+      z-index: 30;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .top-nav.open {
+      display: flex;
+    }
+  }
 </style>
 </head>
 <body>
@@ -192,13 +274,18 @@
     <div class="band-white-top">
       <div class="header-bar">
         <div class="brand-logo">
-          <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
+          <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
+          </a>
         </div>
-        <nav class="top-nav">
+        <nav class="top-nav" id="topNav">
           <a href="réalisations.html" class="active">Réalisations</a>
           <a href="contexte.html">Contexte</a>
           <a href="contact.html">Contact</a>
         </nav>
+        <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="topNav">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
 
@@ -249,6 +336,25 @@
   </div>
 
   <script>
+    // --- Menu mobile (hamburger) ---
+    const menuToggle = document.getElementById('menuToggle');
+    const topNav = document.getElementById('topNav');
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = topNav.classList.toggle('open');
+      menuToggle.classList.toggle('open', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Ferme le menu après avoir choisi un lien
+    topNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        topNav.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
     const pion = document.getElementById('pionVoiture');
 
     const SEUIL_FLAMMES = 8;
