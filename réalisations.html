@@ -245,6 +245,12 @@
     transform: scale(0.82);
   }
 
+  /* Dézoom fort : image entière visible, encore réduite dans le cadre */
+  .realisation-frame img.zoom-out-fort {
+    object-fit: contain;
+    transform: scale(0.7);
+  }
+
   @media (max-width: 768px) {
     .realisations-grid {
       grid-template-columns: repeat(2, 130px);
@@ -385,15 +391,21 @@
         </p>
         <br>
         <br>
+      </div>
     
+      <div class="content-box">
         <h2>Partie 02 - Apport d’une identité au livre blanc</h2>
 
         <p>À partir de cet univers, j’ai conçu la couverture et l’ensemble de la direction artistique du livre blanc.
         La mise en page, les couleurs, les éléments graphiques et la hiérarchie des informations ont été pensés pour créer une lecture claire tout en conservant le fil rouge du jeu.
         </p>
+      </div>
+        
+
         <br>
         <br>
 
+      <div class="content-box">
         <h2>Partie 03 - Transformer le concept en réel</h2>
 
         <p>Une fois l’univers défini, j’ai décliné le concept sur différents supports. 
@@ -419,7 +431,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Carte de propriété</div>
             <div class="realisation-frame">
-              <img class="zoom-out" src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
+              <img class="zoom-out-fort" src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
           </div>
 
@@ -433,7 +445,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Plateau de jeu</div>
             <div class="realisation-frame">
-              <img class="zoom-out" src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
+              <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
           </div>
 
