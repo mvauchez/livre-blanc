@@ -395,11 +395,41 @@
   const CAT_MESSAGE_PHASE1 = "On dirait que ça ne lui a pas plu..";
   const CAT_MESSAGE_PHASE2 = "Non, ça ne lui plaît pas du tout.";
   const CAT_MESSAGE_PHASE3 = "Et tu recommences en plus ?! <br> Tiens, rends toi utile et aide le chat à retrouver sa famille.";
+  const CAT_STATE3_IMG = "Images/Pions/Chappy-ending.png";
+  const CAT_SOUND_3 = "Sons/Chat-state3.wav";
+  const CAT_MESSAGE_THANKS = "Merci";
   let catClickCount = 0;
   let catIsAngry = false;
   let catAngryOccurrences = 0;
+  let catState3Unlocked = false;
+
+  function checkState3Unlock() {
+    if (catState3Unlocked) return;
+    const raw = profilAutreTexte.value.trim().toLowerCase();
+    if (raw === 'chat' || raw === 'chats') {
+      unlockCatState3();
+    }
+  }
+
+  function unlockCatState3() {
+    catState3Unlocked = true;
+    catIsAngry = false;
+    catClickCount = 0;
+    catOverlay.style.display = 'none';
+    catLogo.src = CAT_STATE3_IMG;
+    catMessage.innerHTML = CAT_MESSAGE_THANKS;
+    catMessage.style.display = 'block';
+  }
+
+  profilAutreTexte.addEventListener('input', checkState3Unlock);
 
   catLogo.addEventListener('click', function() {
+    if (catState3Unlocked) {
+      const sound3 = new Audio(CAT_SOUND_3);
+      sound3.play();
+      return;
+    }
+
     if (catIsAngry) return;
 
     catClickCount++;
@@ -430,6 +460,7 @@
       sound2.play();
 
       setTimeout(function() {
+        if (catState3Unlocked) return; // le 3e état a pris le dessus entre temps
         catLogo.src = CAT_NORMAL_IMG;
         catOverlay.style.display = 'none';
         catMessage.style.display = 'none';
