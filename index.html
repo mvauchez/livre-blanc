@@ -451,11 +451,21 @@
      ===================================================================== */
   @media (max-width: 768px) {
 
-    /* --- Hauteur des bandes : le plateau prend beaucoup plus de place --- */
-    .band-white-top { flex: 0 0 9vh; z-index: 60; }
-    .hero-section   { flex: 0 0 63vh; }
-    .band-white-mid { flex: 0 0 3vh; }
-    .nav-section    { flex: 0 0 25vh; padding: 0 8px; }
+    /* --- Hauteur de page mesurée en JavaScript ---
+       window.innerHeight est reconnu par tous les navigateurs, y compris les
+       versions de Safari iOS antérieures à 15.4 qui ignorent l'unité svh.
+       La valeur de repli 100svh ne sert que le temps du premier affichage. */
+    .page { height: var(--app-height, 100svh); }
+
+    /* --- Hauteur des bandes : le plateau prend beaucoup plus de place ---
+       Hauteurs en % de la hauteur réelle de .page (et non en vh) : sur Safari iOS,
+       100vh ignore les barres du navigateur, ce qui poussait tout le bas de la page
+       (cartes et flèches) hors de l'écran. Le % se calcule sur la hauteur du
+       conteneur, donc le total fait toujours exactement un écran. */
+    .band-white-top { flex: 0 0 9%; z-index: 60; }
+    .hero-section   { flex: 0 0 63%; }
+    .band-white-mid { flex: 0 0 3%; }
+    .nav-section    { flex: 0 0 25%; padding: 0 8px; }
 
     /* --- En-tête : liens remplacés par l'icône menu --- */
     .header-bar { padding: 0 16px; gap: 12px; }
@@ -564,10 +574,10 @@
   /* Écran bas et étroit (téléphone en paysage) : on garde titre + bouton */
   @media (max-width: 768px) and (max-height: 480px) {
     .content-wrapper p { display: none; }
-    .band-white-top { flex: 0 0 14vh; }
-    .hero-section   { flex: 0 0 59vh; }
-    .band-white-mid { flex: 0 0 2vh; }
-    .nav-section    { flex: 0 0 25vh; }
+    .band-white-top { flex: 0 0 14%; }
+    .hero-section   { flex: 0 0 59%; }
+    .band-white-mid { flex: 0 0 2%; }
+    .nav-section    { flex: 0 0 25%; }
   }
 </style>
 </head>
@@ -827,10 +837,28 @@
       }
     });
 
+    // Hauteur réelle de la fenêtre, mesurée en JavaScript.
+    // Sert de hauteur de page sur téléphone : window.innerHeight est reconnu par
+    // tous les navigateurs, contrairement à l'unité svh (Safari iOS 15.4 et +).
+    function setAppHeight() {
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+    }
+
     window.addEventListener('resize', () => {
+      setAppHeight();
       applyMode();
     });
 
+    window.addEventListener('orientationchange', () => {
+      // le changement d'orientation met la nouvelle hauteur à disposition
+      // avec un léger décalage sur certains téléphones
+      setTimeout(() => {
+        setAppHeight();
+        applyMode();
+      }, 200);
+    });
+
+    setAppHeight();
     applyMode();
     requestAnimationFrame(measureStep);
   </script>
