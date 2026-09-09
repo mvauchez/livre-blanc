@@ -248,12 +248,64 @@
   /* Dézoom fort : image entière visible, encore réduite dans le cadre */
   .realisation-frame img.zoom-out-fort {
     object-fit: contain;
-    transform: scale(0.7);
+    transform: scale(0.85);
   }
 
   /* Zoom : recadrage plus serré que le cover par défaut */
   .realisation-frame img.zoom-in {
     transform: scale(1.2);
+  }
+
+  /* Variante de cadre : fine bordure noire au lieu du cadre vert */
+  .realisation-frame.cadre-noir {
+    border: 2px solid #000000;
+  }
+
+  /* --- Aperçu "rétroprojecteur" au survol (ordinateur uniquement) ---
+     Chaque case garde en réserve une version agrandie de son image,
+     projetée sur le côté droit au survol, comme une image projetée
+     sur un écran. Désactivé sur téléphone/tactile (voir media query
+     plus bas), et masqué par défaut pour ne rien changer visuellement
+     au repos. */
+  .realisation-item {
+    position: relative;
+  }
+
+  .realisation-preview {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-left: 20px;
+    width: 260px;
+    height: 260px;
+    background-color: #ffffff;
+    border: 6px solid var(--bg-green);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) scale(0.1);
+    transform-origin: left center;
+    transition: transform .35s var(--ease-slide, cubic-bezier(.4,0,.2,1)), opacity .35s ease;
+    z-index: 200;
+  }
+
+  .realisation-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (min-width: 769px) and (hover: hover) {
+    .realisation-item:hover {
+      z-index: 300;
+    }
+
+    .realisation-item:hover .realisation-preview {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
   }
 
   @media (max-width: 768px) {
@@ -419,12 +471,18 @@
             <div class="realisation-frame">
               <img class="zoom-out" src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
             </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Pion personnalisé.png" alt="">
+            </div>
           </div>
 
           <div class="realisation-item">
             <div class="realisation-name">Case de bien</div>
             <div class="realisation-frame">
               <img class="zoom-out-leger" src="Images/RealisationPhotos/Case.png" alt="Case de bien">
+            </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Case.png" alt="">
             </div>
           </div>
 
@@ -433,12 +491,18 @@
             <div class="realisation-frame">
               <img class="zoom-out-fort" src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Carte.png" alt="">
+            </div>
           </div>
 
           <div class="realisation-item">
             <div class="realisation-name">Carte chance</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-noir">
               <img src="Images/RealisationPhotos/Carte chance.png" alt="Carte chance">
+            </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Carte chance.png" alt="">
             </div>
           </div>
 
@@ -447,19 +511,28 @@
             <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="">
+            </div>
           </div>
 
           <div class="realisation-item">
             <div class="realisation-name">Couverture Livre blanc</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-noir">
               <img src="Images/RealisationPhotos/Mockup Livre Blanc.png" alt="Couverture Livre blanc">
+            </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Mockup Livre Blanc.png" alt="">
             </div>
           </div>
 
           <div class="realisation-item">
             <div class="realisation-name">Favicon LOGO</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-noir">
               <img src="Images/RealisationPhotos/Favicon LB.png" alt="Favicon LOGO">
+            </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/Favicon LB.png" alt="">
             </div>
           </div>
 
@@ -467,6 +540,9 @@
             <div class="realisation-name">FAIT MAISON</div>
             <div class="realisation-frame">
               <img class="zoom-in" src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
+            </div>
+            <div class="realisation-preview">
+              <img src="Images/RealisationPhotos/FAIT MAISON.png" alt="">
             </div>
           </div>
         </div>
