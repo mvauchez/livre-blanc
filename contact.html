@@ -307,7 +307,7 @@
         <p>Vous souhaitez échanger autour de la gamification, de la communication immobilière ou simplement me faire un retour sur ce livre blanc ?</p>
         <p>Retrouvez-moi ou contactez-moi directement :</p>
         <div class="contact-links">
-          <a href="https://www.linkedin.com/in/mvauchez/" target="_blank" rel="noopener">
+          <a href="https://www.linkedin.com/in/mvauchez/" target="_blank" rel="noopener" id="linkedinLink">
             <img src="Images/Logos/Linkedin logo.png" alt="LinkedIn">
           </a>
           <a href="mailto:maxime.vauchez3@gmail.com">
@@ -394,6 +394,59 @@
       });
     }
   });
+
+  // === Ouverture du profil LinkedIn dans l'application (mobile) avec repli web ===
+  // Sur mobile, on tente d'ouvrir l'app LinkedIn ; si elle n'est pas installée
+  // (ou ne prend pas le relais), on retombe automatiquement sur le site web.
+  // Sur ordinateur, le lien garde son comportement normal (ouverture du web).
+  (function () {
+    const linkedinLink = document.getElementById('linkedinLink');
+    if (!linkedinLink) return;
+
+    const WEB_URL = 'https://www.linkedin.com/in/mvauchez/';
+    const IOS_APP_URL = 'linkedin://profile/mvauchez';
+    const ANDROID_APP_URL =
+      'intent://www.linkedin.com/in/mvauchez/#Intent;scheme=https;package=com.linkedin.android;end';
+
+    const ua = navigator.userAgent || navigator.vendor || '';
+    const isAndroid = /android/i.test(ua);
+    const isIOS = /iphone|ipad|ipod/i.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad iOS 13+
+
+    linkedinLink.addEventListener('click', function (event) {
+      // Ordinateur : on ne touche à rien, comportement normal.
+      if (!isAndroid && !isIOS) return;
+
+      event.preventDefault();
+
+      if (isAndroid) {
+        // Chrome/Android bascule tout seul vers WEB_URL si l'app est absente.
+        window.location.href = ANDROID_APP_URL;
+        return;
+      }
+
+      // iOS : on tente l'app, puis repli web si l'app n'a pas pris le relais.
+      let appOuverte = false;
+      const marquerOuverte = function () { appOuverte = true; };
+
+      document.addEventListener('visibilitychange', marquerOuverte);
+      window.addEventListener('pagehide', marquerOuverte);
+      window.addEventListener('blur', marquerOuverte);
+
+      window.location.href = IOS_APP_URL;
+
+      setTimeout(function () {
+        document.removeEventListener('visibilitychange', marquerOuverte);
+        window.removeEventListener('pagehide', marquerOuverte);
+        window.removeEventListener('blur', marquerOuverte);
+
+        // Si on est toujours sur la page (app non ouverte), on va sur le web.
+        if (!appOuverte && document.visibilityState === 'visible') {
+          window.location.href = WEB_URL;
+        }
+      }, 1200);
+    });
+  })();
 </script>
 </body>
 </html>
