@@ -189,10 +189,12 @@
      taille fixe définie ici (indépendante des dimensions des images),
      assez grande pour voir le contenu, assez petite pour tenir
      dans le content-box. Le nom est affiché au-dessus du cadre,
-     comme un cartel au-dessus d'un tableau. */
+     comme un cartel au-dessus d'un tableau.
+     Grille (et non flex) pour que la dernière ligne, même incomplète,
+     reste alignée sur les colonnes des lignes précédentes. */
   .realisations-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 170px);
     justify-content: center;
     gap: 32px 24px;
     margin-top: 24px;
@@ -232,7 +234,22 @@
     display: block;
   }
 
+  /* Dézoom complet : image entière visible, sans recadrage
+     (utilisé pour les photos jugées trop zoomées) */
+  .realisation-frame img.zoom-out {
+    object-fit: contain;
+  }
+
+  /* Dézoom léger : garde le recadrage mais réduit le zoom */
+  .realisation-frame img.zoom-out-leger {
+    transform: scale(0.82);
+  }
+
   @media (max-width: 768px) {
+    .realisations-grid {
+      grid-template-columns: repeat(2, 130px);
+    }
+
     .realisation-item {
       width: 130px;
     }
@@ -382,11 +399,13 @@
         <p>Une fois l’univers défini, j’ai décliné le concept sur différents supports. 
         Il s’agit de la partie ou je me suis le plus amusé, voila ce que ça donne : </p>
 
+        <br>
+
         <div class="realisations-grid">
           <div class="realisation-item">
             <div class="realisation-name">Pion personnalisé</div>
             <div class="realisation-frame">
-              <img src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
+              <img class="zoom-out" src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
             </div>
           </div>
 
@@ -400,7 +419,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Carte de propriété</div>
             <div class="realisation-frame">
-              <img src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
+              <img class="zoom-out" src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
           </div>
 
@@ -414,7 +433,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Plateau de jeu</div>
             <div class="realisation-frame">
-              <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
+              <img class="zoom-out" src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
           </div>
 
@@ -435,7 +454,7 @@
           <div class="realisation-item">
             <div class="realisation-name">FAIT MAISON</div>
             <div class="realisation-frame">
-              <img src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
+              <img class="zoom-out-leger" src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
             </div>
           </div>
         </div>
