@@ -196,19 +196,6 @@
     gap: 10px;
     font-size: 0.92rem;
     cursor: pointer;
-    padding: 4px 6px 4px 8px;
-    border-radius: 3px;
-    border-left: 3px solid var(--loc-color, transparent);
-    background-color: transparent;
-    transition: background-color .15s ease;
-  }
-
-  .loc-option:hover {
-    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.03));
-  }
-
-  .loc-option.is-checked {
-    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.04));
   }
 
   .loc-swatch {
@@ -464,15 +451,20 @@
           les mêmes champs que dans propriete.html (slug, title, price,
           surface, type, color) + "thumb" = chemin de la vignette
           (ex: "Images/Cases/Case METZ.png").
+       -> "priceRank" : classement du prix réel (1 = le moins cher), utilisé
+          UNIQUEMENT pour le tri "Prix". Tant que les prix affichés restent
+          "- €", c'est ce nombre qui permet au tri de fonctionner correctement.
+          Le jour où un vrai prix est renseigné dans "price", priceRank peut
+          être retiré et le tri recalculé automatiquement à partir du prix.
        ========================================================================= */
     const PROPERTIES = [
-      { slug: 'rue-de-metz', title: 'Rue de Metz', price: '- €', surface: '164 m²', type: 'Appartement', color: '#22a54c', thumb: 'Images/Cases/Case METZ.png' },
-      { slug: 'avenue-lagarde', title: 'Avenue de Lagarde', price: '- €', surface: '739 m²', type: 'Bureau', color: '#f69003', thumb: 'Images/Cases/Case LAGARDE.png' },
+      { slug: 'rue-de-metz', title: 'Rue de Metz', price: '- €', priceRank: 5, surface: '164 m²', type: 'Appartement', color: '#22a54c', thumb: 'Images/Cases/Case METZ.png' },
+      { slug: 'avenue-lagarde', title: 'Avenue de Lagarde', price: '- €', priceRank: 3, surface: '739 m²', type: 'Bureau', color: '#f69003', thumb: 'Images/Cases/Case LAGARDE.png' },
       // { slug: 'rue-tolosane', title: 'Rue Tolosane', price: '- €', surface: '52 m²', type: 'Appartement', color: '#e3030d', thumb: 'Images/Cases/Case TOLOSANE.png' },
-      { slug: 'rue-mage', title: 'Rue Mage', price: '- €', surface: '165 m²', type: 'Bureau', color: '#ffed00', thumb: 'Images/Cases/Case MAGE.png' },
-      { slug: 'impasse-ampere', title: 'Impasse Ampère', price: '- €', surface: '96 m²', type: 'Maison', color: '#d73089', thumb: 'Images/Cases/Case AMPERE.png' },
-      { slug: 'rue-cany', title: 'Rue Cany', price: '- €', surface: '86 m²', type: 'Appartement', color: '#bae2fb', thumb: 'Images/Cases/Case CANY.png' },
-      { slug: 'rue-croix-baragnon', title: 'Rue Croix Baragnon', price: '-€', surface: '62 m²', type: 'Maison', color: '#036ab3', thumb: 'Images/Cases/Case CROIX BARAGNON.png' }
+      { slug: 'rue-mage', title: 'Rue Mage', price: '- €', priceRank: 4, surface: '165 m²', type: 'Bureau', color: '#ffed00', thumb: 'Images/Cases/Case MAGE.png' },
+      { slug: 'impasse-ampere', title: 'Impasse Ampère', price: '- €', priceRank: 2, surface: '96 m²', type: 'Maison', color: '#d73089', thumb: 'Images/Cases/Case AMPERE.png' },
+      { slug: 'rue-cany', title: 'Rue Cany', price: '- €', priceRank: 1, surface: '86 m²', type: 'Appartement', color: '#bae2fb', thumb: 'Images/Cases/Case CANY.png' },
+      { slug: 'rue-croix-baragnon', title: 'Rue Croix Baragnon', price: '-€', priceRank: 6, surface: '62 m²', type: 'Maison', color: '#036ab3', thumb: 'Images/Cases/Case CROIX BARAGNON.png' }
     ];
 
     // Extrait un nombre depuis "164 m²" ou "- €" (renvoie NaN si aucun chiffre)
@@ -499,25 +491,12 @@
     let selectedTypes = new Set(); // vide = tous les types affichés
     const PROPERTY_TYPES = ['Maison', 'Appartement', 'Bureau'];
 
-    // Convertit une couleur hexadécimale ("#22a54c") en rgba(...) pour
-    // pouvoir l'utiliser comme fond translucide derrière chaque rue
-    function hexToRgba(hex, alpha) {
-      const clean = hex.replace('#', '');
-      const r = parseInt(clean.substring(0, 2), 16);
-      const g = parseInt(clean.substring(2, 4), 16);
-      const b = parseInt(clean.substring(4, 6), 16);
-      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-    }
-
     // --- Construction du panneau "Localisation" à partir des biens existants ---
     function buildLocPanel() {
       locPanel.innerHTML = '';
       PROPERTIES.forEach(prop => {
         const label = document.createElement('label');
         label.className = 'loc-option';
-        // Couleur associée à la rue : liseré + fond teinté au survol/sélection
-        label.style.setProperty('--loc-color', prop.color);
-        label.style.setProperty('--loc-color-tint', hexToRgba(prop.color, 0.08));
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -525,7 +504,6 @@
         checkbox.addEventListener('change', () => {
           if (checkbox.checked) selectedStreets.add(prop.slug);
           else selectedStreets.delete(prop.slug);
-          label.classList.toggle('is-checked', checkbox.checked);
           updateLocCount();
           render();
         });
@@ -648,10 +626,10 @@
           sorted.sort((a, b) => parseNumber(b.surface) - parseNumber(a.surface));
           break;
         case 'price-asc':
-          sorted.sort((a, b) => parseNumber(a.price) - parseNumber(b.price));
+          sorted.sort((a, b) => a.priceRank - b.priceRank);
           break;
         case 'price-desc':
-          sorted.sort((a, b) => parseNumber(b.price) - parseNumber(a.price));
+          sorted.sort((a, b) => b.priceRank - a.priceRank);
           break;
       }
       return sorted;
