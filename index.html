@@ -562,6 +562,7 @@
     }
 
     /* --- Cartes : 2 visibles, flèches conservées --- */
+    .cards-viewport { touch-action: pan-y; }
     .nav-arrow { padding: 4px; }
     .nav-arrow svg { width: 22px; height: 22px; }
 
@@ -670,6 +671,7 @@
     let cardEls = [];
     let step = 0;        // largeur d'une carte + chevauchement, mesurée en pixels
     let isAnimating = false;
+    let swipeMoved = false; // vrai si le doigt a glissé horizontalement (voir plus bas)
 
     function mod(n, m) {
       return ((n % m) + m) % m;
@@ -714,6 +716,11 @@
         // Téléphone : un appui sur la carte couchée la relève ; un second appui
         // sur la carte relevée ouvre la page de la propriété.
         card.addEventListener('click', (e) => {
+          // Un glissement horizontal ne doit ni relever la carte ni ouvrir le lien
+          if (swipeMoved) {
+            e.preventDefault();
+            return;
+          }
           if (card.classList.contains('is-active')) return; // carte relevée : on laisse le lien s'ouvrir
           // Au repos, l'appui ne doit jamais rediriger vers la propriété
           e.preventDefault();
@@ -809,6 +816,48 @@
 
     btnPrev.addEventListener('click', () => slide(-1));
     btnNext.addEventListener('click', () => slide(1));
+
+    // --- Glissement horizontal du doigt sur les cartes ---
+    // Équivaut aux flèches : vers la gauche = propriété suivante,
+    // vers la droite = propriété précédente.
+    const SWIPE_MIN = 40; // distance minimale (px) pour valider un glissement
+    let swipeStartX = null;
+    let swipeStartY = null;
+
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      swipeStartX = e.touches[0].clientX;
+      swipeStartY = e.touches[0].clientY;
+      swipeMoved = false;
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e) => {
+      if (swipeStartX === null) return;
+      const dx = e.touches[0].clientX - swipeStartX;
+      const dy = e.touches[0].clientY - swipeStartY;
+      // dès que le mouvement est franchement horizontal, on le marque comme
+      // glissement : l'appui ne relèvera donc pas la carte au relâchement
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        swipeMoved = true;
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      if (swipeStartX === null) return;
+      const dx = e.changedTouches[0].clientX - swipeStartX;
+      const dy = e.changedTouches[0].clientY - swipeStartY;
+      swipeStartX = null;
+      swipeStartY = null;
+      if (Math.abs(dx) >= SWIPE_MIN && Math.abs(dx) > Math.abs(dy)) {
+        slide(dx < 0 ? 1 : -1);
+      }
+    });
+
+    viewport.addEventListener('touchcancel', () => {
+      swipeStartX = null;
+      swipeStartY = null;
+      swipeMoved = false;
+    });
 
     // Un appui en dehors des cartes les recouche
     // (l'appui sur une carte est géré par son propre gestionnaire de clic)
