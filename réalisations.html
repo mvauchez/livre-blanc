@@ -185,7 +185,7 @@
     margin-bottom: 10px;
   }
 
-  /* Grille des réalisations (Partie 03) : 8 cadres identiques,
+  /* Grille des réalisations (Partie 3) : 8 cadres identiques,
      taille fixe définie ici (indépendante des dimensions des images),
      assez grande pour voir le contenu, assez petite pour tenir
      dans le content-box. Le nom est affiché au-dessus du cadre,
@@ -225,7 +225,6 @@
     border: 6px solid var(--bg-green);
     background-color: #ffffff;
     overflow: hidden;
-    cursor: url('Images/loupe.png') 16 16, pointer;
   }
 
   .realisation-frame img {
@@ -249,7 +248,7 @@
   /* Dézoom fort : image entière visible, encore réduite dans le cadre */
   .realisation-frame img.zoom-out-fort {
     object-fit: contain;
-    transform: scale(0.85);
+    transform: scale(0.97);
   }
 
   /* Image rectangulaire (plus haute que large) : image entière visible
@@ -266,13 +265,13 @@
 
   /* Variante de cadre : fine bordure noire au lieu du cadre vert */
   .realisation-frame.cadre-noir {
-    border: 2px solid #000000;
+    border: 1px solid #000000;
   }
 
   /* Cadre vert conservé, mais avec un fin liseré noir uniquement
      sur l'extrémité extérieure de ce cadre vert */
   .realisation-frame.cadre-vert-lisere {
-    outline: 2px solid #000000;
+    outline: 1px solid #000000;
   }
 
   /* --- Aperçu "rétroprojecteur" au survol (ordinateur uniquement) ---
@@ -320,6 +319,24 @@
       opacity: 1;
       transform: translateY(-50%) scale(1);
     }
+
+    .realisation-frame {
+      cursor: none;
+    }
+  }
+
+  /* Curseur loupe personnalisé : taille contrôlée en CSS (24px),
+     positionné en JS pour suivre la souris (voir script en bas de page) */
+  .loupe-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: auto;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+    transform: translate(-50%, -50%);
   }
 
   @media (max-width: 768px) {
@@ -473,7 +490,7 @@
       <br>
 
       <div class="content-box">
-        <h2>Partie 03 - Transformer le concept en réel</h2>
+        <h2>Partie 3 - Transformer le concept en réel</h2>
 
         <p>Une fois l’univers défini, j’ai décliné le concept sur différents supports. 
         Il s’agit de la partie ou je me suis le plus amusé, voila ce que ça donne : </p>
@@ -572,6 +589,8 @@
 
   </div>
 
+  <img id="loupeCursor" class="loupe-cursor" src="Images/loupe.png" alt="">
+
   <script>
     // --- Menu mobile (identique à index.html) ---
     const menuToggle = document.getElementById('menuToggle');
@@ -591,6 +610,27 @@
         menuToggle.setAttribute('aria-expanded', 'false');
         menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
       }
+    });
+
+    // --- Curseur loupe personnalisé (ordinateur uniquement) ---
+    // Une petite icône (taille fixée en CSS, 24px) suit la souris au survol
+    // des cases de réalisations, à la place du curseur système.
+    const loupeCursor = document.getElementById('loupeCursor');
+    const DESKTOP_HOVER_MQ = window.matchMedia('(min-width: 769px) and (hover: hover)');
+
+    document.querySelectorAll('.realisation-frame').forEach((frame) => {
+      frame.addEventListener('mouseenter', () => {
+        if (!DESKTOP_HOVER_MQ.matches) return;
+        loupeCursor.style.display = 'block';
+      });
+      frame.addEventListener('mousemove', (e) => {
+        if (!DESKTOP_HOVER_MQ.matches) return;
+        loupeCursor.style.left = e.clientX + 'px';
+        loupeCursor.style.top = e.clientY + 'px';
+      });
+      frame.addEventListener('mouseleave', () => {
+        loupeCursor.style.display = 'none';
+      });
     });
 
     const pion = document.getElementById('pionVoiture');
