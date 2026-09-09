@@ -47,6 +47,11 @@
     gap: 20px;
   }
 
+  .logo-link {
+    display: block;
+    line-height: 0;
+  }
+
   .logo {
     height: 32px;
     width: auto;
@@ -216,6 +221,17 @@
     .photo-wrap { min-height: 180px; }
     .photo-wrap img { max-height: 38vh; }
     .gallery-arrow { width: 38px; height: 38px; font-size: 1.1rem; }
+
+    /* Le retour à l'accueil se fait désormais via le logo (en haut à gauche) */
+    .btn-home { display: none; }
+
+    /* Panneau blanc (contenant les cases Prix/Surface/Type) légèrement réduit */
+    .info-panel { padding: clamp(17px, 2.5vw, 30px); }
+
+    /* Cases Prix / Surface / Type de bien : réduction légère (~15%) */
+    .spec-box { padding: 10px 15px; min-width: 102px; }
+    .spec-label { font-size: 0.61rem; }
+    .spec-value { font-size: 0.98rem; }
   }
 </style>
 </head>
@@ -225,7 +241,9 @@
 
     <header class="topbar">
       <div class="topbar-inner">
-        <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
+        <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
+          <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
+        </a>
         <button class="btn-all" id="btnAll">Voir toutes les propriétés</button>
       </div>
     </header>
@@ -296,7 +314,7 @@
         price: '- €',                                // PLACEHOLDER
         surface: '164 m²',                                  // PLACEHOLDER
         type: 'Appartement',                               // PLACEHOLDER
-        info: 'Ce superbe appartement T4 au dernier étage à une vue magnifique sur la rue de Metz et la cathédrale Saint-Etienne.', // PLACEHOLDER
+        info: 'Ce superbe appartement T4 au dernier étage a une vue magnifique sur la rue de Metz et la cathédrale Saint-Etienne.', // PLACEHOLDER
         color: '#22a54c',
         mainImage: 'Images/PPT METZ.png',
         // Photos supplémentaires propres à ce bien, dans l'ordre d'affichage.
