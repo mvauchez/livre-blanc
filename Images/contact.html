@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Livre Blanc - Téléchargez maintenant</title>
+<link rel="icon" type="image/png" href="Images/Favicon LB.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-cream: #faf9f7;
+    --bg-green: #d8e5d1;
+    --text-dark: #1a1a1a;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-cream);
+  }
+
+  .page {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Bande blanche du haut : identique à l'Accueil (logo + navigation) */
+  .band-white-top {
+    flex: 0 0 auto;
+    background-color: var(--bg-cream);
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .header-bar {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .brand-logo img {
+    height: clamp(24px, 5vh, 44px);
+    width: auto;
+    display: block;
+  }
+
+  .top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(18px, 3vw, 40px);
+    margin-left: auto;
+  }
+
+  .top-nav a {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.9vh, 1.1rem);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-dark);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .top-nav a:hover {
+    opacity: 0.65;
+  }
+
+  .top-nav a.active {
+    font-weight: 800;
+    text-decoration: underline;
+  }
+
+  /* Bande verte : contenu de la page */
+  .green-section {
+    flex: 1 1 auto;
+    background-color: var(--bg-green);
+    padding: 20px clamp(16px, 4vw, 40px) 40px;
+    position: relative;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid #000000;
+    background-color: #faf9f8;
+    color: #000000;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .back-btn:hover {
+    background-color: #000000;
+    color: #faf9f8;
+  }
+
+  /* Emplacement du pion */
+  .pion-wrap {
+    text-align: center;
+    margin: 0 0 16px;
+  }
+
+  .pion-wrap img {
+    max-height: 80px;
+    width: auto;
+    cursor: pointer;
+  }
+
+  /* Cadre de texte, identique à .intro sur questionnaire.html */
+  .content-box {
+    max-width: 640px;
+    margin: 0 auto;
+    background-color: #faf9f8;
+    border: 1px solid #000000;
+    padding: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .content-box h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+  }
+
+  .content-box p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 14px 0;
+  }
+
+  .content-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 32px 0;
+  }
+
+  .contact-links a img {
+    height: 64px;
+    width: auto;
+    display: block;
+  }
+
+  .credit-box {
+    max-width: 640px;
+    margin: 0 auto;
+    background-color: #faf9f8;
+    border: 1px solid #000000;
+    padding: 10px 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .credit-box a.pierrefonds-link img {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+
+  /* --- Logo cliquable (retour accueil) : desktop + mobile --- */
+  .logo-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* --- Bouton menu (identique à index.html / contexte.html / réalisations.html) : masqué par défaut (desktop) --- */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+    line-height: 0;
+  }
+
+  .menu-toggle img {
+    height: clamp(20px, 4vh, 30px);
+    width: auto;
+    display: block;
+  }
+
+  /* --- Version mobile --- */
+  @media (max-width: 768px) {
+    .header-bar {
+      position: relative;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .back-btn {
+      display: none;
+    }
+
+    .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 16px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      background-color: var(--bg-cream);
+      border: 1px solid #e3e1dc;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      padding: 14px 0;
+      min-width: 190px;
+      z-index: 61;
+    }
+
+    .top-nav.is-open {
+      display: flex;
+    }
+
+    .top-nav a {
+      display: block;
+      width: 100%;
+      text-align: right;
+      padding: 18px 22px;
+      font-size: 0.95rem;
+    }
+
+    .top-nav a:active {
+      background-color: #efeee9;
+    }
+
+    .pion-wrap {
+      margin-top: 30px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="band-white-top">
+      <div class="header-bar">
+        <div class="brand-logo">
+          <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img src="Images/HASA Promotion Logo.png" alt="Logo entreprise">
+          </a>
+        </div>
+        <nav class="top-nav" id="topNav">
+          <a href="réalisations.html">Réalisations</a>
+          <a href="contexte.html">Contexte</a>
+          <a href="contact.html" class="active">Contact</a>
+        </nav>
+        <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="topNav">
+          <img src="Images/Menu.png" alt="">
+        </button>
+      </div>
+    </div>
+
+    <section class="green-section">
+      <a class="back-btn" href="index.html">&larr; Retour à l'Accueil</a>
+
+      <div class="pion-wrap">
+        <img src="Images/Pions/Pion bouffi sans fond.png" alt="Pion" id="pionContact">
+      </div>
+
+      <div class="content-box">
+        <h1>Une question ? Un projet ? Parlons-en. 🧑‍💻</h1>
+        <p>Vous souhaitez échanger autour de la gamification, de la communication immobilière ou simplement me faire un retour sur ce livre blanc ?</p>
+        <p>Retrouvez-moi ou contactez-moi directement :</p>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/mvauchez/" target="_blank" rel="noopener">
+            <img src="Images/Logos/Linkedin logo.png" alt="LinkedIn">
+          </a>
+          <a href="mailto:maxime.vauchez3@gmail.com">
+            <img src="Images/Logos/Mail logo.png" alt="Mail">
+          </a>
+        </div>
+        <p>La partie ne s’arrête pas ici. 🎲</p>
+        <p>Une idée, une question ou un projet ? Je suis toujours partant pour en discuter.</p>
+      </div>
+
+      <br>
+      <div class="credit-box">
+        <span>Ce site a été conçu avec l'aide de Théo ACKER.</span>
+        <a class="pierrefonds-link" href="https://vitrinetheoa.fr" target="_blank" rel="noopener">
+          <img src="Images/Logos/Pierrefonds.png" alt="Pierrefonds">
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+  // --- Menu mobile (identique à index.html / contexte.html / réalisations.html) ---
+  const menuToggle = document.getElementById('menuToggle');
+  const topNav = document.getElementById('topNav');
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = topNav.classList.toggle('is-open');
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+  });
+
+  // Un appui ailleurs referme le menu
+  document.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('#topNav') && !e.target.closest('#menuToggle')) {
+      topNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+    }
+  });
+
+  // === Sons du pion (clic) : à compléter avec les chemins réels ===
+  // Boucle stricte : audio 1, puis audio 2, puis audio 1, etc.
+  const PION_SONS = [
+    "Sons/Sound Effect Voix LB.mp3",
+    "Sons/Sound effect Voix LB 2.mp3"
+   ];
+  // ===================================================================
+
+  // Préchargement des sons : évite les échecs de lecture liés à un fichier
+  // pas encore prêt au moment du clic (fréquent sur mobile/Safari).
+  const pionAudios = PION_SONS.map(src => {
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    return audio;
+  });
+
+  const pionContact = document.getElementById('pionContact');
+  let pionEnCours = false;
+  let pionIndex = 0; // index du prochain son à jouer (alterne 0,1,0,1,...)
+
+  function debloquerPion() {
+    pionEnCours = false;
+  }
+
+  pionContact.addEventListener('click', function() {
+    if (pionEnCours) return; // le son en cours ne peut pas être coupé
+
+    pionEnCours = true;
+    const son = pionAudios[pionIndex];
+    pionIndex = (pionIndex + 1) % pionAudios.length;
+    son.currentTime = 0;
+
+    son.addEventListener('ended', debloquerPion, { once: true });
+    son.addEventListener('error', debloquerPion, { once: true });
+
+    const lecture = son.play();
+    if (lecture && typeof lecture.catch === 'function') {
+      lecture.catch(function() {
+        // La lecture a été bloquée ou a échoué : on débloque le pion
+        // pour ne pas rester coincé silencieusement.
+        debloquerPion();
+      });
+    }
+  });
+</script>
+</body>
+</html>
