@@ -46,10 +46,20 @@
     gap: 20px;
   }
 
+  .logo-link {
+    display: block;
+    line-height: 0;
+  }
+
   .logo {
     height: 32px;
     width: auto;
     display: block;
+  }
+
+  /* Bouton "Filtrer / Trier" : masqué par défaut, réservé au téléphone */
+  .btn-filter-mobile {
+    display: none;
   }
 
   .btn-home-top {
@@ -256,15 +266,131 @@
     .properties-grid { grid-template-columns: repeat(3, 1fr); }
   }
 
-  @media (max-width: 680px) {
-    .properties-grid { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 680px) and (min-width: 769px) {
+    /* n'existe plus dans les faits (680 < 769) : conservé pour ne rien
+       changer sur les tailles intermédiaires non couvertes par le bloc
+       téléphone ci-dessous, au cas où. */
     .toolbar { flex-direction: column; }
     .toolbar-group { flex: 1 1 auto; justify-content: flex-start; }
     .toolbar-divider { width: 100%; height: 2px; }
   }
 
-  @media (max-width: 420px) {
-    .properties-grid { grid-template-columns: 1fr; }
+  /* =====================================================================
+     VERSION TÉLÉPHONE — tout ce qui suit ne s'applique qu'en dessous de
+     768px de large. L'affichage ordinateur reste strictement inchangé.
+     ===================================================================== */
+  @media (max-width: 768px) {
+
+    /* --- En-tête : le bouton "Retour à l'accueil" disparaît,
+           le logo (déjà cliquable) le remplace --- */
+    .btn-home-top { display: none; }
+
+    .topbar-inner { padding: 14px 16px; }
+
+    /* --- Grille : toujours 2 colonnes, quelle que soit la largeur du
+           téléphone, pour garantir au moins 4 vignettes visibles (2x2) --- */
+    .green-inner { padding: 18px 14px 40px; }
+    .page-title { font-size: clamp(1.35rem, 6vw, 1.8rem); margin-bottom: 16px; }
+
+    .properties-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px;
+    }
+
+    /* --- Bouton "Filtrer / Trier" : remplace l'ancienne barre --- */
+    .btn-filter-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background-color: #ffffff;
+      color: var(--text-dark);
+      border: 2px solid var(--text-dark);
+      padding: 13px 16px;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .btn-filter-mobile .filter-icon {
+      display: flex;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .btn-filter-mobile .filter-icon svg { width: 100%; height: 100%; }
+
+    .btn-filter-mobile .loc-count { color: var(--text-dark); }
+
+    /* --- La barre d'origine devient le panneau ouvert par le bouton --- */
+    .toolbar {
+      display: none;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+
+    .toolbar.is-open { display: flex; }
+
+    .toolbar-group {
+      flex: 1 1 auto;
+      justify-content: flex-start;
+      align-items: stretch;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 16px;
+    }
+
+    .toolbar-divider { width: 100%; height: 2px; }
+
+    /* Le libellé "Classer par" doit avoir exactement la même police/
+       taille que "Localisation" / "Type de biens" (même règle CSS déjà
+       partagée, on fige juste la mise en page pour qu'elle ne varie
+       plus selon le contenu du <select>) */
+    .toolbar-group label {
+      display: block;
+    }
+
+    #sortSelect {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      padding: 10px 34px 10px 12px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+
+    /* Boutons "Localisation" / "Type de biens" : toute la largeur,
+       texte + compteur + chevron bien alignés, rien ne dépasse */
+    .loc-toggle {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    /* Les sous-panneaux s'affichent en ligne, sous leur bouton,
+       au lieu d'un popover positionné en absolu (qui pouvait déborder
+       de l'écran) */
+    .loc-panel {
+      position: static;
+      transform: none;
+      width: 100%;
+      min-width: 0;
+      margin-top: 10px;
+      box-shadow: none;
+      border-width: 2px 0 0 0;
+      max-height: 45vh;
+      overflow-y: auto;
+    }
   }
 </style>
 </head>
@@ -274,7 +400,9 @@
 
     <header class="topbar">
       <div class="topbar-inner">
-        <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
+        <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
+          <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
+        </a>
         <a class="btn-home-top" href="index.html">&larr; Retour à l'accueil</a>
       </div>
     </header>
@@ -284,7 +412,15 @@
 
         <h1 class="page-title">Nos propriétés</h1>
 
-        <div class="toolbar">
+        <button class="btn-filter-mobile" id="filterToggleMobile" aria-expanded="false" aria-controls="toolbar">
+          <span class="filter-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="10" y1="18" x2="14" y2="18"></line></svg>
+          </span>
+          Filtrer / Trier
+          <span class="loc-count" id="filterCount"></span>
+        </button>
+
+        <div class="toolbar" id="toolbar">
           <div class="toolbar-group">
             <label for="sortSelect">Classer par</label>
             <select id="sortSelect">
@@ -358,6 +494,10 @@
     const typeToggle = document.getElementById('typeToggle');
     const typePanel = document.getElementById('typePanel');
     const typeCount = document.getElementById('typeCount');
+    const filterToggleMobile = document.getElementById('filterToggleMobile');
+    const filterCount = document.getElementById('filterCount');
+    const toolbar = document.getElementById('toolbar');
+    const MOBILE_MQ = window.matchMedia('(max-width: 768px)');
 
     let selectedStreets = new Set(); // vide = toutes les rues affichées
     let selectedTypes = new Set(); // vide = tous les types affichés
@@ -396,6 +536,7 @@
 
     function updateLocCount() {
       locCount.textContent = selectedStreets.size > 0 ? '(' + selectedStreets.size + ')' : '';
+      updateFilterCount();
     }
 
     // --- Construction du panneau "Type de biens" ---
@@ -426,7 +567,40 @@
 
     function updateTypeCount() {
       typeCount.textContent = selectedTypes.size > 0 ? '(' + selectedTypes.size + ')' : '';
+      updateFilterCount();
     }
+
+    // --- Compteur global affiché sur le bouton "Filtrer / Trier" (mobile) ---
+    function updateFilterCount() {
+      const total = selectedStreets.size + selectedTypes.size;
+      filterCount.textContent = total > 0 ? '(' + total + ')' : '';
+    }
+
+    // --- Bouton "Filtrer / Trier" (mobile uniquement) : ouvre/ferme le
+    //     panneau qui regroupe Classer par / Localisation / Type de biens ---
+    function closeFilterPanel() {
+      toolbar.classList.remove('is-open');
+      filterToggleMobile.setAttribute('aria-expanded', 'false');
+    }
+
+    filterToggleMobile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = toolbar.classList.toggle('is-open');
+      filterToggleMobile.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) {
+        locToggle.setAttribute('aria-expanded', 'false');
+        locPanel.hidden = true;
+        typeToggle.setAttribute('aria-expanded', 'false');
+        typePanel.hidden = true;
+      }
+    });
+
+    // Un appui en dehors du panneau (mobile) le referme entièrement
+    document.addEventListener('pointerdown', (e) => {
+      if (!MOBILE_MQ.matches) return;
+      if (toolbar.contains(e.target) || filterToggleMobile.contains(e.target)) return;
+      closeFilterPanel();
+    });
 
     locToggle.addEventListener('click', () => {
       const isOpen = locToggle.getAttribute('aria-expanded') === 'true';
