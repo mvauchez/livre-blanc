@@ -251,6 +251,11 @@
     transform: scale(0.7);
   }
 
+  /* Zoom : recadrage plus serré que le cover par défaut */
+  .realisation-frame img.zoom-in {
+    transform: scale(1.2);
+  }
+
   @media (max-width: 768px) {
     .realisations-grid {
       grid-template-columns: repeat(2, 130px);
@@ -420,7 +425,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Case de bien</div>
             <div class="realisation-frame">
-              <img src="Images/RealisationPhotos/Case.png" alt="Case de bien">
+              <img class="zoom-out-leger" src="Images/RealisationPhotos/Case.png" alt="Case de bien">
             </div>
           </div>
 
@@ -462,7 +467,7 @@
           <div class="realisation-item">
             <div class="realisation-name">FAIT MAISON</div>
             <div class="realisation-frame">
-              <img class="zoom-out-leger" src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
+              <img class="zoom-in" src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
             </div>
           </div>
         </div>
