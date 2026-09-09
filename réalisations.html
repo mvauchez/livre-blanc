@@ -252,6 +252,13 @@
     transform: scale(0.85);
   }
 
+  /* Image rectangulaire (plus haute que large) : image entière visible
+     (pas de recadrage en hauteur), légèrement réduite dans le cadre */
+  .realisation-frame img.zoom-out-vertical {
+    object-fit: contain;
+    transform: scale(0.92);
+  }
+
   /* Zoom : recadrage plus serré que le cover par défaut */
   .realisation-frame img.zoom-in {
     transform: scale(1.2);
@@ -262,11 +269,10 @@
     border: 2px solid #000000;
   }
 
-  /* Cadre vert conservé, mais avec un fin liseré noir aux deux
-     extrémités de ce cadre vert (bord extérieur et bord intérieur) */
+  /* Cadre vert conservé, mais avec un fin liseré noir uniquement
+     sur l'extrémité extérieure de ce cadre vert */
   .realisation-frame.cadre-vert-lisere {
     outline: 2px solid #000000;
-    box-shadow: inset 0 0 0 2px #000000;
   }
 
   /* --- Aperçu "rétroprojecteur" au survol (ordinateur uniquement) ---
@@ -487,7 +493,7 @@
           <div class="realisation-item">
             <div class="realisation-name">Case de bien</div>
             <div class="realisation-frame cadre-vert-lisere">
-              <img class="zoom-out-leger" src="Images/RealisationPhotos/Case.png" alt="Case de bien">
+              <img class="zoom-out-vertical" src="Images/RealisationPhotos/Case.png" alt="Case de bien">
             </div>
             <div class="realisation-preview">
               <img src="Images/RealisationPhotos/Case.png" alt="">
