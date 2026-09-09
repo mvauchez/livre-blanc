@@ -62,21 +62,6 @@
     display: none;
   }
 
-  .btn-home-top {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.9rem;
-    background-color: #ffffff;
-    border: 2px solid var(--text-dark);
-    padding: 10px 20px;
-    cursor: pointer;
-    color: var(--text-dark);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .btn-home-top:hover { background-color: #f2f2f2; }
-
   /* ---------- Zone verte ---------- */
   .green-area {
     flex: 1 1 auto;
@@ -211,28 +196,27 @@
     gap: 10px;
     font-size: 0.92rem;
     cursor: pointer;
-    padding: 6px 8px 6px 10px;
-    border-radius: 4px;
-    border-left: 5px solid var(--loc-color, transparent);
+    padding: 4px 6px 4px 8px;
+    border-radius: 3px;
+    border-left: 3px solid var(--loc-color, transparent);
     background-color: transparent;
     transition: background-color .15s ease;
   }
 
   .loc-option:hover {
-    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.04));
+    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.03));
   }
 
   .loc-option.is-checked {
-    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.06));
+    background-color: var(--loc-color-tint, rgba(0, 0, 0, 0.04));
   }
 
   .loc-swatch {
-    width: 18px;
-    height: 18px;
-    border-radius: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
     flex: 0 0 auto;
-    border: 2px solid rgba(0, 0, 0, 0.25);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    border: 1px solid rgba(0, 0, 0, 0.15);
   }
 
   .loc-option input {
@@ -298,8 +282,6 @@
 
     /* --- En-tête : le bouton "Retour à l'accueil" disparaît,
            le logo (déjà cliquable) le remplace --- */
-    .btn-home-top { display: none; }
-
     .topbar-inner { padding: 14px 16px; }
 
     /* --- Grille : toujours 2 colonnes, quelle que soit la largeur du
@@ -418,7 +400,6 @@
         <a class="logo-link" href="index.html" aria-label="Retour à l'accueil">
           <img class="logo" src="Images/HASA Promotion Logo.png" alt="HASA Promotion">
         </a>
-        <a class="btn-home-top" href="index.html">&larr; Retour à l'accueil</a>
       </div>
     </header>
 
@@ -536,7 +517,7 @@
         label.className = 'loc-option';
         // Couleur associée à la rue : liseré + fond teinté au survol/sélection
         label.style.setProperty('--loc-color', prop.color);
-        label.style.setProperty('--loc-color-tint', hexToRgba(prop.color, 0.16));
+        label.style.setProperty('--loc-color-tint', hexToRgba(prop.color, 0.08));
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
