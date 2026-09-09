@@ -225,6 +225,7 @@
     border: 6px solid var(--bg-green);
     background-color: #ffffff;
     overflow: hidden;
+    cursor: url('Images/loupe.png') 16 16, pointer;
   }
 
   .realisation-frame img {
@@ -261,6 +262,13 @@
     border: 2px solid #000000;
   }
 
+  /* Cadre vert conservé, mais avec un fin liseré noir aux deux
+     extrémités de ce cadre vert (bord extérieur et bord intérieur) */
+  .realisation-frame.cadre-vert-lisere {
+    outline: 2px solid #000000;
+    box-shadow: inset 0 0 0 2px #000000;
+  }
+
   /* --- Aperçu "rétroprojecteur" au survol (ordinateur uniquement) ---
      Chaque case garde en réserve une version agrandie de son image,
      projetée sur le côté droit au survol, comme une image projetée
@@ -276,8 +284,8 @@
     top: 50%;
     left: 100%;
     margin-left: 20px;
-    width: 260px;
     height: 260px;
+    width: auto;
     background-color: #ffffff;
     border: 6px solid var(--bg-green);
     box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
@@ -291,9 +299,9 @@
   }
 
   .realisation-preview img {
-    width: 100%;
     height: 100%;
-    object-fit: contain;
+    width: auto;
+    max-width: 340px;
     display: block;
   }
 
@@ -468,7 +476,7 @@
         <div class="realisations-grid">
           <div class="realisation-item">
             <div class="realisation-name">Pion personnalisé</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-vert-lisere">
               <img class="zoom-out" src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
             </div>
             <div class="realisation-preview">
@@ -478,7 +486,7 @@
 
           <div class="realisation-item">
             <div class="realisation-name">Case de bien</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-vert-lisere">
               <img class="zoom-out-leger" src="Images/RealisationPhotos/Case.png" alt="Case de bien">
             </div>
             <div class="realisation-preview">
@@ -488,7 +496,7 @@
 
           <div class="realisation-item">
             <div class="realisation-name">Carte de propriété</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-vert-lisere">
               <img class="zoom-out-fort" src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
             <div class="realisation-preview">
@@ -508,7 +516,7 @@
 
           <div class="realisation-item">
             <div class="realisation-name">Plateau de jeu</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-vert-lisere">
               <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
             <div class="realisation-preview">
@@ -538,7 +546,7 @@
 
           <div class="realisation-item">
             <div class="realisation-name">FAIT MAISON</div>
-            <div class="realisation-frame">
+            <div class="realisation-frame cadre-vert-lisere">
               <img class="zoom-in" src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
             </div>
             <div class="realisation-preview">
