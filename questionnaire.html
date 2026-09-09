@@ -198,7 +198,7 @@
     <img src="Images/Chat.png" alt="Logo" id="catLogo">
     <div id="catOverlay"></div>
   </div>
-  <div id="catMessage">On dirait que ça ne lui a pas plu..</div>
+  <div id="catMessage"></div>
 
   <div class="intro">
     <h1>Jouez autrement avec votre communication immobilière. 🎲</h1>
@@ -392,8 +392,11 @@
   const catOverlay = document.getElementById('catOverlay');
   const catMessage = document.getElementById('catMessage');
   const CAT_CLICKS_NEEDED = 7;
+  const CAT_MESSAGE_FIRST = "On dirait que ça ne lui a pas plut..";
+  const CAT_MESSAGE_SECOND = "Et tu recommences en plus ?! <br> Tiens, fais quelque chose d'utile et aide le chat à trouver sa famille";
   let catClickCount = 0;
   let catIsAngry = false;
+  let catHasBeenAngryBefore = false;
 
   catLogo.addEventListener('click', function() {
     if (catIsAngry) return;
@@ -407,6 +410,7 @@
       catIsAngry = true;
       catLogo.src = CAT_ANGRY_IMG;
       catOverlay.style.display = 'block';
+      catMessage.innerHTML = catHasBeenAngryBefore ? CAT_MESSAGE_SECOND : CAT_MESSAGE_FIRST;
       catMessage.style.display = 'block';
 
       const sound2 = new Audio(CAT_SOUND_2);
@@ -418,6 +422,7 @@
         catMessage.style.display = 'none';
         catIsAngry = false;
         catClickCount = 0;
+        catHasBeenAngryBefore = true;
       }, CAT_ANGRY_DURATION);
     }
   });
