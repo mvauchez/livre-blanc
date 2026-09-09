@@ -392,11 +392,12 @@
   const catOverlay = document.getElementById('catOverlay');
   const catMessage = document.getElementById('catMessage');
   const CAT_CLICKS_NEEDED = 7;
-  const CAT_MESSAGE_FIRST = "On dirait que ça ne lui a pas plut..";
-  const CAT_MESSAGE_SECOND = "Et tu recommences en plus ?! <br> Tiens, fais quelque chose d'utile et aide le chat à trouver sa famille";
+  const CAT_MESSAGE_PHASE1 = "On dirait que ça ne lui a pas plu..";
+  const CAT_MESSAGE_PHASE2 = "Non, ça ne lui plaît pas du tout.";
+  const CAT_MESSAGE_PHASE3 = "Et tu recommences en plus ?! <br> Tiens, rends toi utile et aide le chat à retrouver sa famille";
   let catClickCount = 0;
   let catIsAngry = false;
-  let catHasBeenAngryBefore = false;
+  let catAngryOccurrences = 0;
 
   catLogo.addEventListener('click', function() {
     if (catIsAngry) return;
@@ -410,7 +411,19 @@
       catIsAngry = true;
       catLogo.src = CAT_ANGRY_IMG;
       catOverlay.style.display = 'block';
-      catMessage.innerHTML = catHasBeenAngryBefore ? CAT_MESSAGE_SECOND : CAT_MESSAGE_FIRST;
+
+      catAngryOccurrences++;
+      let currentMessage;
+      if (catAngryOccurrences === 1) {
+        currentMessage = CAT_MESSAGE_PHASE1;
+      } else if (catAngryOccurrences === 2) {
+        currentMessage = CAT_MESSAGE_PHASE2;
+      } else if (catAngryOccurrences === 3) {
+        currentMessage = CAT_MESSAGE_PHASE3;
+      } else {
+        currentMessage = CAT_MESSAGE_PHASE1;
+      }
+      catMessage.innerHTML = currentMessage;
       catMessage.style.display = 'block';
 
       const sound2 = new Audio(CAT_SOUND_2);
@@ -422,7 +435,6 @@
         catMessage.style.display = 'none';
         catIsAngry = false;
         catClickCount = 0;
-        catHasBeenAngryBefore = true;
       }, CAT_ANGRY_DURATION);
     }
   });
