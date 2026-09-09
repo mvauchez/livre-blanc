@@ -185,28 +185,28 @@
     margin-bottom: 10px;
   }
 
-  /* Grille des réalisations (Partie 03) */
+  /* Grille des réalisations (Partie 03) : 8 cadres identiques,
+     taille fixe définie ici (indépendante des dimensions des images),
+     assez grande pour voir le contenu, assez petite pour tenir
+     dans le content-box. Le nom est affiché au-dessus du cadre,
+     comme un cartel au-dessus d'un tableau. */
   .realisations-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px 24px;
     margin-top: 24px;
   }
 
-  /* Le cadre est le carré complet : il englobe le titre ET l'image.
-     Le format carré (aspect-ratio 1/1) est fixe, quelle que soit
-     la taille ou les proportions de l'image d'origine. */
-  .realisation-frame {
-    aspect-ratio: 1 / 1;
-    background-color: var(--bg-green);
+  .realisation-item {
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    align-items: center;
+    width: 170px;
   }
 
   .realisation-name {
-    flex: 0 0 auto;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -214,15 +214,18 @@
     margin-bottom: 10px;
   }
 
-  /* L'image s'adapte au cadre (et non l'inverse) : elle remplit
-     entièrement l'espace disponible, quitte à être recadrée. */
-  .realisation-image {
-    flex: 1 1 auto;
-    min-height: 0;
+  /* Le cadre : taille fixe, carrée, façon cadre de tableau.
+     L'image est forcée à occuper tout l'espace intérieur
+     (zoom/dézoom automatique via object-fit: cover). */
+  .realisation-frame {
+    width: 170px;
+    height: 170px;
+    border: 6px solid var(--bg-green);
+    background-color: #ffffff;
     overflow: hidden;
   }
 
-  .realisation-image img {
+  .realisation-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -230,13 +233,18 @@
   }
 
   @media (max-width: 768px) {
-    .realisations-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+    .realisation-item {
+      width: 130px;
+    }
+
+    .realisation-frame {
+      width: 130px;
+      height: 130px;
+      border-width: 5px;
     }
 
     .realisation-name {
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 
@@ -375,58 +383,58 @@
         Il s’agit de la partie ou je me suis le plus amusé, voila ce que ça donne : </p>
 
         <div class="realisations-grid">
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Pion personnalisé</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Case de bien</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Case.png" alt="Case de bien">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Carte de propriété</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Carte chance</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Carte chance.png" alt="Carte chance">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Plateau de jeu</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Couverture Livre blanc</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Mockup Livre Blanc.png" alt="Couverture Livre blanc">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">Favicon LOGO</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/Favicon LB.png" alt="Favicon LOGO">
             </div>
           </div>
 
-          <div class="realisation-frame">
+          <div class="realisation-item">
             <div class="realisation-name">FAIT MAISON</div>
-            <div class="realisation-image">
+            <div class="realisation-frame">
               <img src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
             </div>
           </div>
