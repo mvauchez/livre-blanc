@@ -188,41 +188,44 @@
   /* Grille des réalisations (Partie 03) */
   .realisations-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-top: 24px;
   }
 
-  .realisation-item {
+  /* Le cadre est le carré complet : il englobe le titre ET l'image.
+     Le format carré (aspect-ratio 1/1) est fixe, quelle que soit
+     la taille ou les proportions de l'image d'origine. */
+  .realisation-frame {
+    aspect-ratio: 1 / 1;
+    background-color: var(--bg-green);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 16px;
   }
 
   .realisation-name {
-    font-size: 13px;
+    flex: 0 0 auto;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
-  .realisation-frame {
+  /* L'image s'adapte au cadre (et non l'inverse) : elle remplit
+     entièrement l'espace disponible, quitte à être recadrée. */
+  .realisation-image {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .realisation-image img {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    border: 3px solid #4a7a3d;
-    background-color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-  }
-
-  .realisation-frame img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
 
@@ -372,58 +375,58 @@
         Il s’agit de la partie ou je me suis le plus amusé, voila ce que ça donne : </p>
 
         <div class="realisations-grid">
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Pion personnalisé</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Pion personnalisé.png" alt="Pion personnalisé">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Case de bien</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Case.png" alt="Case de bien">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Carte de propriété</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Carte.png" alt="Carte de propriété">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Carte chance</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Carte chance.png" alt="Carte chance">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Plateau de jeu</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Plateau de jeu.png" alt="Plateau de jeu">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Couverture Livre blanc</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Mockup Livre Blanc.png" alt="Couverture Livre blanc">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">Favicon LOGO</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/Favicon LB.png" alt="Favicon LOGO">
             </div>
           </div>
 
-          <div class="realisation-item">
+          <div class="realisation-frame">
             <div class="realisation-name">FAIT MAISON</div>
-            <div class="realisation-frame">
+            <div class="realisation-image">
               <img src="Images/RealisationPhotos/FAIT MAISON.png" alt="FAIT MAISON">
             </div>
           </div>
